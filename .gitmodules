@@ -1,0 +1,6 @@
+[submodule "Builder"]
+	path = Builder
+	url = https://github.com/imikado/mkframeworkBuilder.git
+[submodule "Lib/mkframeworkLib"]
+	path = Lib/mkframeworkLib
+	url = https://github.com/imikado/mkframeworkLib.git
