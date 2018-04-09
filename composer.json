@@ -1,0 +1,18 @@
+{
+	"name": "mkframework/mkframeworkPackage",
+	"description": "Full package with Builder and the mkframework lib.",
+	"license": "LGPL-3.0-only",
+	"version": "1.0.0",
+	"homepage" : "http://mkframework.com",
+	"require": {
+		"php": ">=5.2.0"
+	},
+	 "authors": [
+        {
+            "name": "Michael Bertocchi",
+            "homepage": "http://mkframework.com/",
+            "role": "Developer"
+        }
+
+    	]
+}
