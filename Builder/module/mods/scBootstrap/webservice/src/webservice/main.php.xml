@@ -1,0 +1,94 @@
+<main>
+
+	<formules>
+		<formu type="loopWithKey" source="params" param="tMethod" keyField="key">
+			<action type="setVariable" name="sMethod" source="params" param="tMethod" useKey="$key" />
+			<action type="setVariable" name="sParam" source="params" param="tParam" useKey="$key" />
+			<action type="setVariable" name="sReturn" source="params" param="tReturn" useKey="$key" />
+
+			<action type="splitVariable" source="$sParam" pattern="," arrayVar="tParamArray"/>
+			<action type="splitVariable" source="$sReturn" pattern="," arrayVar="tReturnArray"/>
+
+			<!--params -->
+			<action type="resetVar" name="listParamsWsdl" />
+			<action type="loopWithKey" source="tParamArray" keyField="paramKey">
+
+				<saction type="setVariable" name="sParamToSplit" source="variables" param="tParamArray" useKey="$paramKey"/>
+
+				<saction type="splitVariable" source="$sParamToSplit" pattern=":" >
+					<var name="sParamName"></var>
+					<var name="sParamType"></var>
+				</saction>
+
+					<saction type="setVariable" name="addParameterVar" source="snippet" param="addParameter">
+						<pattern tag="VARsParamNameENDVAR" value="$sParamName"/>
+						<pattern tag="VARsTypeNameENDVAR" value="$sParamType"/>
+					</saction>
+
+					<saction type="concatVar" name="listParamsWsdl" value="$addParameterVar"/>
+			</action>
+
+			<!--return -->
+			<action type="resetVar" name="listReturnWsdl" />
+			<action type="loopWithKey" source="tReturnArray" keyField="returnKey">
+
+				<saction type="setVariable" name="sReturnToSplit" source="variables" param="tReturnArray" useKey="$returnKey"/>
+
+				<saction type="splitVariable" source="$sReturnToSplit" pattern=":" >
+					<var name="sReturnName"></var>
+					<var name="sReturnType"></var>
+				</saction>
+
+					<saction type="setVariable" name="addReturnVar" source="snippet" param="addReturn">
+						<pattern tag="VARsReturnNameENDVAR" value="$sReturnName"/>
+						<pattern tag="VARsReturnTypeENDVAR" value="$sReturnType"/>
+					</saction>
+
+					<saction type="concatVar" name="listReturnWsdl" value="$addReturnVar"/>
+			</action>
+
+
+			<action type="setVariable" name="sPluginWsdlListMethodToConcat" source="snippet" param="pluginWsdlMethod">
+				<pattern tag="VARmethodENDVAR" value="$sMethod"/>
+				<pattern tag="VARlistParamsWsdlENDVAR" value="$listParamsWsdl"/>
+				<pattern tag="VARlistReturnWsdlENDVAR" value="$listReturnWsdl"/>
+			</action>
+
+
+			<action type="concatParam" name="PluginWsdlListMethod" value="$sPluginWsdlListMethodToConcat"/>
+
+		</formu>
+	</formules>
+
+	<snippets>
+		<pluginWsdlMethod>
+
+			<code><![CDATA[
+	$oPluginWsdl->addFunction('VARmethodENDVAR');
+	    //ainsi que ses parametres
+		VARlistParamsWsdlENDVAR
+
+	    //et ses eventuels retours
+		VARlistReturnWsdlENDVAR
+
+		]]></code>
+		</pluginWsdlMethod>
+		<addParameter>
+			<code><![CDATA[
+		$oPluginWsdl->addParameter('VARsParamNameENDVAR','VARsTypeNameENDVAR');
+			]]></code>
+		</addParameter>
+
+		<addReturn>
+				<code><![CDATA[
+		$oPluginWsdl->addReturn('VARsReturnNameENDVAR','VARsReturnTypeENDVAR');
+				]]></code>
+		</addReturn>
+
+	</snippets>
+
+	<path>
+		<directory>module/VARmoduleChildENDVAR</directory>
+	</path>
+	<target>module/VARmoduleChildENDVAR/main.php</target>
+</main>

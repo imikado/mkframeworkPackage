@@ -1,0 +1,56 @@
+<main>
+	<patterns>
+		<pattern>#colonnestr#</pattern>
+
+	</patterns>
+	<snippets>
+
+		<ligneTrTd>
+			<patterns>
+				<pattern>#th#</pattern>
+				<pattern>#td#</pattern>
+		
+			</patterns>
+			<code><![CDATA[
+	<tr>
+		<th>#th#</th>
+		<td>#td#</td>
+	</tr>
+			]]></code>
+		</ligneTrTd>
+		
+		<getInputText>
+			<patterns>
+				<pattern>#column#</pattern>
+			</patterns>
+			<code><![CDATA[<?php echo $oForm->getInputText('#column#');?>]]></code>
+		</getInputText>
+		
+		<getInputTextarea>
+			<patterns>
+				<pattern>#column#</pattern>
+			</patterns>
+			<code><![CDATA[<?php echo $oForm->getInputTextarea('#column#');?>]]></code>
+		</getInputTextarea>
+		
+		<getSelect>
+			<patterns>
+				<pattern>#column#</pattern>
+			</patterns>
+			<code><![CDATA[<?php echo $oForm->getSelect('#column#',$this->tJoin#column#);?>]]></code>
+		</getSelect>
+		
+		<upload>
+			<patterns>
+				<pattern>#column#</pattern>
+			</patterns>
+			<code><![CDATA[<input type="file" name="#column#"/>]]></code>
+		</upload>
+
+	
+	</snippets>
+	<path>
+		<directory>module/#examplemodule#/view</directory>
+	</path>
+	<target>module/#examplemodule#/view/#exampleview#.php</target>
+</main>

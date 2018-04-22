@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<forms>
+
+	<step id="1">
+		<form>
+
+
+			<row name="moduleChild" required="true">
+				<label>moduleName</label>
+				<input type="input" value="webservice"/>
+			</row>
+
+			<row name="businessName" required="true">
+				<label>businessName</label>
+				<input type="input" value="businessName"/>
+			</row>
+
+			<row name="url" required="true">
+				<label>url</label>
+				<input type="input" value="http://monurl.com/webservice.php"/>
+			</row>
+
+		</form>
+	</step>
+
+	<step id="2">
+		<form>
+			<row name="actions" required="true">
+				<label>actions</label>
+				<input type="multiInput" value="" />
+			</row>
+
+
+		</form>
+	</step>
+
+	<step id="3">
+
+
+		<form>
+
+			<row type="html">
+				<html><![CDATA[
+
+					<table >
+						<tr>
+							<th>Type</th>
+						</tr>
+						<tr>
+							<td>string</td>
+						</tr>
+						<tr>
+							<td>int</td>
+						</tr>
+					</table>
+
+					<p>*Syntax: param:type</p>
+					<p>Exple: login:string</p>
+					<p>Exple 2: login:string,password:string</p>
+
+					]]></html>
+			</row>
+
+			<row type="loop" source="params" param="$actions" keyVar="i" valueVar="columnCurrent">
+				<col name="tMethod">
+					<label>method</label>
+					<input type="input" value="$columnCurrent"/>
+				</col>
+
+				<col name="tParam">
+					<label>params*</label>
+					<input type="textarea" value=""/>
+				</col>
+
+				<col name="tReturn">
+					<label>return*</label>
+					<input type="textarea" value=""/>
+				</col>
+
+			</row>
+
+
+		</form>
+	</step>
+
+
+
+
+
+</forms>
