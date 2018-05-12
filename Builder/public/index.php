@@ -43,6 +43,7 @@ $oRoot->addConf('../conf/mode.ini.php');
 $oRoot->addConf('../conf/site.ini.php');
 $oRoot->addConf('../conf/language.ini.php');
 $oRoot->addConf('../conf/market.ini.php');
+$oRoot->addConf('../conf/dependencies.ini.php');
 $oRoot->addRequest($_GET);
 $oRoot->addRequest($_POST);
 $oRoot->run();

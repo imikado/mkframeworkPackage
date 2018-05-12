@@ -33,5 +33,10 @@ au moment de la g&eacute;n&eacute;ration de votre nouvelle application, un layou
     'explorerAjouterUnModule' => 'Ajouter un module',
     'explorerGenererLaCoucheModele' => 'G&eacute;n&eacute;rer la couche mod&egrave;le',
     'retour' => 'Retour',
+
+
+    'builder::texteErreurVersion'=>'La version minimum du framework requise <strong>FMKVERSIONMIN</strong> est sup&eacute;rieur &agrave; la version install&eacute;e <strong>FMKVERSIONCURR</strong>
+    <br/><br/>Veuillez t&eacute;lecharger la <a href="http://mkframework.com/telecharger.html">derni&egrave;re version du framework</a> (la librairie seule) et installez-la dans le repertoire <span class="path">PATHFMK</span>',
+
 ));
 ?>

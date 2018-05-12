@@ -9,6 +9,13 @@ border:none;
 a{
 color:darkblue;
 }
+strong{
+color:#630505;
+}
+.path{
+	background:#ddd;
+	padding:4px;
+}
 .main .menu .top{
 	padding-top:6px;
 	padding-bottom:0px
@@ -43,7 +50,7 @@ background:#ddd;
 	.main .menu ul{
 	margin:0px;
 	padding:0px;
-	
+
 	}
 		.main .menu li{
 		background:#630505;

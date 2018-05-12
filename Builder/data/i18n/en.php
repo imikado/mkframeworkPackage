@@ -33,5 +33,9 @@ during the generation a new specific layout for bootstrap will be created, and t
     'explorerAjouterUnModule' => 'Add a module',
     'explorerGenererLaCoucheModele' => 'Generate model layer',
     'retour' => 'Back',
+
+    'builder::texteErreurVersion'=>'Minimum framework version needed <strong>FMKVERSIONMIN</strong> is higher than the installed version <strong>FMKVERSIONCURR</strong>
+    <br/><br/>Please download the <a href="http://mkframework.com/telecharger_en.html"> last framework version</a> (only library) and install it in <span class="path">PATHFMK</span>',
+
 ));
 ?>

@@ -21,6 +21,35 @@ class module_builder extends abstract_module {
 
 	public static $oTools;
 	public static $sLayout;
+	
+	protected $oBuilderJson;
+	protected $oLibJson;
+	protected $sMinLibVersion;
+	
+	public function getComposer($sFile_){
+		return json_decode(file_get_contents($sFile_));
+	}
+	
+	public function checkMinVersion($sMinVersion_,$sVersion_){
+		//X,Y,Z
+		list($xMin,$yMin,$zMin)=explode('.',$sMinVersion_);
+		
+		list($xCurr,$yCurr,$zCurr)=explode('.',$sVersion_);
+		
+		if($xCurr < $xMin){
+			return false;
+		}
+		
+		if($yCurr < $yMin){
+			return false;
+		}
+		
+		if($zCurr < $zMin){
+			return false;
+		}
+	
+		return true;
+	}
 
 	public static function setLayout($sLayout) {
 		if (!in_array($sLayout, array('templateProjet', 'templateProjetLight'))) {
@@ -34,11 +63,36 @@ class module_builder extends abstract_module {
 	}
 
 	public function before() {
+		$this->oBuilderJson=$this->getComposer(__DIR__.'/../../composer.json');
+		
+		$this->oLibJson=$this->getComposer(_root::getConfigVar('path.lib').'/composer.json');
+		
+		$this->sMinLibVersion=_root::getConfigVar('dependencies.framework.version.min');
+	
 		self::$oTools = new module_builderTools();
 
 		$this->oLayout = new _layout('template1');
+		
+		$oMenu=new module_menu();
+		$oMenu->oBuilderJson=$this->oBuilderJson;
+		$oMenu->oLibJson=$this->oLibJson;
 
-		$this->oLayout->addModule('menu', 'menu::index');
+		$this->oLayout->add('menu', $oMenu->_index() );
+		
+		if(false==$this->checkMinVersion($this->sMinLibVersion,$this->oLibJson->version) ){
+			$this->errorVersionLib();
+		}
+	}
+	
+	public function errorVersionLib(){
+		
+		$oTpl = new _tpl('builder::errorVersionLib');
+		$oTpl->oBuilderJson=$this->oBuilderJson;
+		$oTpl->oLibJson=$this->oLibJson;
+		$oTpl->sMinLibVersion=$this->sMinLibVersion;
+	
+		$this->oLayout->add('main', $oTpl);
+		$this->after();exit;
 	}
 
 	private function getList() {

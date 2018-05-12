@@ -17,9 +17,13 @@ along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
 */
 Class module_menu extends abstract_module{
 
+	public $oBuilderJson;
+	public $oLibJson;
+
 	public function __construct(){
 		plugin_i18n::start();
 	}
+	
 
 	public function _index(){
 
@@ -33,6 +37,8 @@ Class module_menu extends abstract_module{
 
 		$oTpl=new _tpl('menu::index');
 		$oTpl->tLink=$tLink;
+		$oTpl->versionBuilder=$this->oBuilderJson->version;
+		$oTpl->versionLib=$this->oLibJson->version;
 
 		return $oTpl;
 	}

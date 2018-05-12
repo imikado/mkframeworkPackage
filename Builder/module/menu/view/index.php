@@ -1,3 +1,10 @@
+<p style="text-align:right">
+Builder <strong><?php echo $this->versionBuilder;?></strong>
+&nbsp;
+Framework <strong><?php echo $this->versionLib;?></strong>
+
+</p>
+
 <ul>
 	<?php foreach ($this->tLink as $sLibelle => $sLink): ?>
 		<?php if (_root::getParamNav() == 'builder::edit' and $sLink == 'builder::list'): ?>
