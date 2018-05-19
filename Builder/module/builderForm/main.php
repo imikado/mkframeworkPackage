@@ -82,11 +82,11 @@ class module_builderForm {
 	public function load($sPath_) {
 		$this->_sPath = $sPath_;
 
-		$this->_oXml = simplexml_load_file('module/' . $this->_sPath . '/view/form.xml');
+		$this->_oXml = simplexml_load_file('../module/' . $this->_sPath . '/view/form.xml');
 	}
 
 	public function getObjectSource($sSource_) {
-		return module_builder::getTools()->getSource('module/' . $this->_sPath, _root::getConfigVar('path.generation') . _root::getParam('id'), $sSource_);
+		return module_builder::getTools()->getSource('../module/' . $this->_sPath, _root::getConfigVar('path.generation') . _root::getParam('id'), $sSource_);
 	}
 
 	public function getParam($sName_, $default_ = null) {
@@ -511,7 +511,7 @@ class module_builderForm {
 		$tParam = $tParam_;
 		$sSource = $sSource_;
 
-		$sXmlFile = 'module/' . $this->_sPath . '/src/' . $sSource . '.xml';
+		$sXmlFile = '../module/' . $this->_sPath . '/src/' . $sSource . '.xml';
 
 		$tSourceCreated = array();
 

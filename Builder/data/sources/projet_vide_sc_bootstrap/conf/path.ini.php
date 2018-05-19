@@ -1,5 +1,6 @@
 [path]
 lib=../../../Lib/mkframeworkLib/
+builder=../../../Builder/
 
 data=../data/
 upload=../data/upload/

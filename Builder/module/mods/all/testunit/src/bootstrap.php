@@ -8,7 +8,7 @@ if (file_exists('../conf/path.ini.php')) {
 } else {
 	$tIni = parse_ini_file('../conf/site.ini.php', true);
 }
-$sLib = $tIni['path']['lib'] . '../../module/mods/all/testunit/lib';
+$sLib = $tIni['path']['builder'] . '/module/mods/all/testunit/lib';
 
 $tUnitTestClass = array(
 	'class_layout.php',
@@ -35,4 +35,3 @@ $oRoot->addConf('../conf/mode.ini.php');
 $oRoot->addConf('../conf/connexion.ini.php');
 $oRoot->addConf('../conf/site.ini.php');
 $oRoot->loadConf();
-

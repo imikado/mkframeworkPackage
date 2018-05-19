@@ -15,7 +15,7 @@ if (file_exists($tIni['path']['lib'])) {
 }
 
 
-$sLib = $tIni['path']['lib'] . '../../module/mods/all/testunit/lib';
+$sLib = $tIni['path']['builder'] . '/module/mods/all/testunit/lib';
 
 
 $tUnitTestClass = array(
