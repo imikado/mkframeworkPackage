@@ -108,6 +108,19 @@ class plugin_sc_form {
 	}
 
 	/**
+	* retourne un champ input password vide
+	* @access public
+	* @param string $sName nom du champ
+	* @param array $tOption options du champ texte
+	*/
+	public function getInputPasswordEmpty($sName,$tOption=null){
+		$sHtml=null;
+		$sHtml.='<input type="password" name="'.$sName.'" value="" '.$this->getOption($tOption).'/>';
+		$sHtml.=$this->getMessage($sName);
+		return $sHtml;
+	}
+
+	/**
 	 * retourne un champ input texte
 	 * @access public
 	 * @param string $sName nom du champ
