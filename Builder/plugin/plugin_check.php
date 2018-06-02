@@ -223,4 +223,37 @@ class plugin_check{
 		$this->sErrorMsg=$sErrorMsg;
 		return false;
 	}
+	
+	/**
+	* verifie si longueur de la chaine $uValueA est inferieur ou égal a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isStrLengthLowerOrEqualThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthLowerOrEqualThan'){
+		if(strlen($uValueA) <= $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+    
+        
+        	/**
+	* verifie si longueur de la chaine $uValueA est supérieur a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isStrLengthUpperThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthUpperThan'){
+		if(strlen($uValueA) > $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
 }
