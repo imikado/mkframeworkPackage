@@ -198,4 +198,68 @@ class plugin_sc_check{
 		}
 		return $this->ko($sColumn,$sErrorMsg);
 	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est superieur a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthUpperThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthUpperThan'){
+		if(strlen($uValueA) > $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est superieur ou egal a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthUpperOrEqualThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthUpperThan'){
+		if(strlen($uValueA) >= $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est inferieur ou egal a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthLowerOrEqualThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthLowerOrEqualThan'){
+		if(strlen($uValueA) <= $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est inferieur a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthLowerThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthLowerOrEqualThan'){
+		if(strlen($uValueA) < $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
 }

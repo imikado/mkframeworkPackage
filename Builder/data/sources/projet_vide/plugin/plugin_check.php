@@ -15,22 +15,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-/** 
+/**
 * plugin_check classe pour verifier un lot de valeurs (verification de formulaire par exemple)
 * @author Mika
 * @link http://mkf.mkdevs.com/
 */
 class plugin_check{
-	
+
 	private $sErrorMsg;
-	
+
 	/**
 	 * retourne le dernier message d'erreur (utilise par la classe plugin_valid)
 	 * */
 	public function getLastErrorMsg(){
 		return $this->sErrorMsg;
 	}
-	
+
 	/**
 	* verifie si $uValueA est egal a $uValueB
 	* @access public
@@ -201,6 +201,70 @@ class plugin_check{
 	*/
 	public function notMatchExpression($uValueA,$sExpression,$sErrorMsg='KO notMatchExpression'){
 		if(!preg_match($sExpression,$uValueA)){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est superieur a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthUpperThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthUpperThan'){
+		if(strlen($uValueA) > $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est superieur ou egal a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthUpperOrEqualThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthUpperThan'){
+		if(strlen($uValueA) >= $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est inferieur ou egal a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthLowerOrEqualThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthLowerOrEqualThan'){
+		if(strlen($uValueA) <= $uValueB){
+			return true;
+		}
+		$this->sErrorMsg=$sErrorMsg;
+		return false;
+	}
+
+	/**
+	* verifie si longueur de la chaine $uValueA est inferieur a $uValueB
+	* @access public
+	* @param undefined $uValueA valeur A
+	* @param undefined $uValueB valeur B
+	* @param string $sErrorMsg message d'erreur a afficher
+	* @return bool retourne true/false selon
+	*/
+	public function isLengthLowerThan($uValueA,$uValueB,$sErrorMsg='KO isStrLengthLowerOrEqualThan'){
+		if(strlen($uValueA) < $uValueB){
 			return true;
 		}
 		$this->sErrorMsg=$sErrorMsg;
