@@ -101,6 +101,32 @@ class plugin_form{
 		return $sHtml;
 	}
 	/** 
+	* retourne un champ input password
+	* @access public
+	* @param string $sName nom du champ
+	* @param array $tOption options du champ texte
+	*/
+	public function getInputPassword($sName,$tOption=null){
+		$sHtml=null;
+		$sHtml.='<input type="password" name="'.$sName.'" value="'.$this->getValue($sName).'" '.$this->getOption($tOption).'/>';
+		$sHtml.=$this->getMessage($sName);
+		return $sHtml;
+	}
+        
+        /** 
+	* retourne un champ input password vide
+	* @access public
+	* @param string $sName nom du champ
+	* @param array $tOption options du champ texte
+	*/
+	public function getInputPasswordEmpty($sName,$tOption=null){
+		$sHtml=null;
+		$sHtml.='<input type="password" name="'.$sName.'" value="" '.$this->getOption($tOption).'/>';
+		$sHtml.=$this->getMessage($sName);
+		return $sHtml;
+	}
+	
+	/** 
 	* retourne un champ upload
 	* @access public
 	* @param string $sName nom du champ
@@ -230,4 +256,6 @@ class plugin_form{
 		return $sHtml;
 		
 	}
+	
+	
 }
