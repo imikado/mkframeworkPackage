@@ -3,7 +3,9 @@ Package comprenant le builder (générateur) ainsi que la librairie du [mkframew
 
 Package à installer pour commencer à utiliser le framework
 
-Attention: si vous voulez forker le framework il faut forker
 
-Soit pour le builder ce repository: https://github.com/imikado/mkframeworkBuilder
-Soit pour la librairie du framework, ce repository: https://github.com/imikado/mkframeworkLib
+Attention: si vous voulez forker le framework il faut forker:
+
+- Soit pour le builder, ce repository: https://github.com/imikado/mkframeworkBuilder
+
+- Soit pour la librairie du framework, ce repository: https://github.com/imikado/mkframeworkLib
