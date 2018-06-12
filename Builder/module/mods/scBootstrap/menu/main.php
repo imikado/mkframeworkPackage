@@ -7,6 +7,8 @@ class module_mods_scBootstrap_menu extends abstract_moduleBuilder {
 	private $msg = null;
 	private $detail = null;
 	private $tError = null;
+	private $sError=null;
+	private $ok=1;
 
 	public function _index() {
 		$this->process();
@@ -53,6 +55,8 @@ class module_mods_scBootstrap_menu extends abstract_moduleBuilder {
 		$oTpl->msg = $this->msg;
 		$oTpl->detail = $this->detail;
 		$oTpl->tError = $this->tError;
+		$oTpl->sError=$this->sError;
+		$oTpl->ok=$this->ok;
 
 		$oTpl->bExist = $bExist;
 		$oTpl->tModuleAndMethod = $tModuleAndMethod;
@@ -65,6 +69,7 @@ class module_mods_scBootstrap_menu extends abstract_moduleBuilder {
 			return null;
 		}
 
+		$sError=null;
 		$tError = null;
 		$msg = null;
 		$detail = null;
@@ -76,12 +81,17 @@ class module_mods_scBootstrap_menu extends abstract_moduleBuilder {
 
 		$ok = 1;
 
-		//check formulaire
-		foreach ($tMethod as $i => $sMethod) {
-			if ($tLabel[$i] == '') {
-				$tError[$i] = tr('remplissezLeLibelle');
-				$ok = 0;
+		if(count($tMethod)){
+			//check formulaire
+			foreach($tMethod as $i => $sMethod){
+				if($tLabel[$i]==''){
+					$tError[$i]=tr('remplissezLeLibelle');
+					$ok=0;
+				}
 			}
+		}else{
+			$sError=tr('selectionnezAuMoinsUneMethode');
+			$ok=0;
 		}
 
 		if ($ok) {
@@ -113,9 +123,11 @@ class module_mods_scBootstrap_menu extends abstract_moduleBuilder {
 			}
 		}
 
+		$this->sError=$sError;
 		$this->tError = $tError;
 		$this->detail = $detail;
 		$this->msg = $msg;
+		$this->ok=$ok;
 	}
 
 	private function genModuleMenuMain($sModuleMenuName, $tMethod, $tLabel, $sTitle) {

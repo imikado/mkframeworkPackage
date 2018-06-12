@@ -7,6 +7,8 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 	private $msg=null;
 	private $detail=null;
 	private $tError=null;
+	private $sError=null;
+	private $ok=1;
 
 	public function _index(){
 		$this->process();
@@ -19,14 +21,14 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 				continue;
 			}
 			include module_builder::getTools()->getRootWebsite().'module/'.$sModuleName.'/main.php';
-			
+
 			if(get_parent_class('module_'.$sModuleName)!='abstract_module'){
 				continue;
 			}
-			
+
 			$tMethods=get_class_methods('module_'.$sModuleName);
 			foreach($tMethods as $i => $sMethod){
-				if($sMethod[0]!='_' or substr($sMethod,0,2)=='__'){ 
+				if($sMethod[0]!='_' or substr($sMethod,0,2)=='__'){
 					unset($tMethods[$i]);
 				}
 			}
@@ -35,17 +37,19 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 			}
 			$tModuleAndMethod[$sModuleName]=$tMethods;
 		}
-		
+
 		$oDir=new _dir(module_builder::getTools()->getRootWebsite().'module/menu');
 		$bExist=$oDir->exist();
 
 
 		$oTpl= $this->getView('index');
 		//$oTpl->var=$var;
-		
+
 		$oTpl->msg=$this->msg;
 		$oTpl->detail=$this->detail;
 		$oTpl->tError=$this->tError;
+		$oTpl->sError=$this->sError;
+		$oTpl->ok=$this->ok;
 
 		$oTpl->bExist=$bExist;
 		$oTpl->tModuleAndMethod=$tModuleAndMethod;
@@ -57,6 +61,7 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 			return null;
 		}
 
+		$sError=null;
 		$tError=null;
 		$msg=null;
 		$detail=null;
@@ -64,26 +69,31 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 		$sModule=_root::getParam('modulename');
 		$tMethod=_root::getParam('tMethod');
 		$tLabel=_root::getParam('tLabel');
-	    
-	    
-	    $ok=1;
-	    
-	    //check formulaire
-	    foreach($tMethod as $i => $sMethod){
-			if($tLabel[$i]==''){
-				$tError[$i]=tr('remplissezLeLibelle');
-				$ok=0;
+
+
+		$ok=1;
+
+		if(count($tMethod)){
+			//check formulaire
+			foreach($tMethod as $i => $sMethod){
+				if($tLabel[$i]==''){
+					$tError[$i]=tr('remplissezLeLibelle');
+					$ok=0;
+				}
 			}
+		}else{
+			$sError=tr('selectionnezAuMoinsUneMethode');
+			$ok=0;
 		}
-		
+
 		if($ok){
-			
+
 			if(module_builder::getTools()->projetmkdir('module/'.$sModule)==true){
 				$detail=trR('creationRepertoire',array('#REPERTOIRE#'=>'module/'.$sModule));
 
 				if(module_builder::getTools()->projetmkdir('module/'.$sModule.'/view')==true){
 					$detail.='<br />'.trR('creationRepertoire',array('#REPERTOIRE#'=>'module/'.$sModule.'/view'));
-				
+
 					$this->genModuleMenuMain($sModule,$tMethod,$tLabel);
 
 					$msg=trR('moduleGenereAvecSucces',array('#MODULE#'=>$sModule));
@@ -97,24 +107,26 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 
 					$detail.='<br/><br/>'.tr('pourLutiliserAjoutez').'<br />
 					'.highlight_string($sCode,1);
-				
+
 				}else{
 					$detail.='<br />'.trR('repertoireDejaExistant',array('#REPERTOIRE#'=>'module/'.$sModule.'/view'));
 				}
 
-				
+
 			}else{
 			  $detail=trR('repertoireDejaExistant',array('#REPERTOIRE#'=>'module/'.$sModule.'/view'));
 			}
-			
+
 		}
 
+		$this->sError=$sError;
 		$this->tError=$tError;
 		$this->detail=$detail;
 		$this->msg=$msg;
+		$this->ok=$ok;
 	}
 	private function genModuleMenuMain($sModuleMenuName,$tMethod,$tLabel){
-	    
+
 	    $sData=null;
 	    foreach($tMethod as $i => $sLink){
 		$sData.='\''.$tLabel[$i].'\' => \''.$sLink.'\','."\n";
@@ -125,7 +137,7 @@ class module_mods_bootstrap_menu extends abstract_moduleBuilder{
 		/*SOURCE*/$oSourceMain->setPattern('#MODULE#',$sModuleMenuName);
 
 	    /*SOURCE*/$oSourceMain->setPattern('#TABLEAUICI#',$sData);
-	   
+
 	    /*SOURCE*/$oSourceMain->save();
 
 	    $this->projectMkdir('module/'.$sModuleMenuName.'/view');

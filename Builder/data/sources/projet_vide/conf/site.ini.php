@@ -79,10 +79,6 @@ apache.enabled=1
 class=plugin_check
 
 [site]
-;Redirection
-;header : header('location:$url ')
-;http: <html><head><META http-equiv="refresh" content="0; URL=$url ></head></html>
-redirection.default=header
 timezone=Europe/Paris
 
 [model]

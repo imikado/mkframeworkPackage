@@ -82,18 +82,14 @@ apache.enabled=1
 class=plugin_check
 
 [site]
-;Redirection
-;header : header('location:$url ')
-;http: <html><head><META http-equiv="refresh" content="0; URL=$url ></head></html>
-			 redirection.default=header
-			 timezone=Europe/Paris
+timezone=Europe/Paris
 
-			 [model]
-			 ini.var=db
+[model]
+ini.var=db
 
-			 [pdo]
-			 ;Plus d'informations ici: http://www.php.net//manual/fr/pdo.setattribute.php
-			 ;SILENT,WARNING,EXCEPTION
-			 ATTR_ERRMODE=WARNING
-			 ;LOWER,NATURAL,UPPER
-			 ATTR_CASE=NATURAL
+[pdo]
+;Plus d'informations ici: http://www.php.net//manual/fr/pdo.setattribute.php
+;SILENT,WARNING,EXCEPTION
+ATTR_ERRMODE=WARNING
+;LOWER,NATURAL,UPPER
+ATTR_CASE=NATURAL

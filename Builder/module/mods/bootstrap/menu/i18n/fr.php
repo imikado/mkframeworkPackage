@@ -9,9 +9,9 @@
 'classe'=>'classe',
 'pourCreerLeMenu'=>'Pour cr&eacute;er le menu',
 'nomDuModule'=>'Nom du module',
-'methodeAppelee'=>'m&eacute;thode appel&eaccute;e',
+'methodeAppelee'=>'m&eacute;thode appel&eacute;e',
 'libelleDuLien'=>'libell&eacute; du lien',
 'genererLeMenu'=>'generer le menu',
 'leRepertoireModuleExisteDeja'=>'le repertoire module existe d&eacute;j&agrave;',
-
+'selectionnezAuMoinsUneMethode'=>'Vous devez selectionner au moins une m&eacute;thode',
 ));
