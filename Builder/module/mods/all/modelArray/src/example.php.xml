@@ -2,27 +2,20 @@
 	<patterns>
 		<pattern>#maTable#</pattern>
 		
-		<pattern>#sSnippet#</pattern>
-		<pattern>#example#</pattern>
-
 	</patterns>
 	<snippets>
-		<monSnippet>
+		<dataRow>
 			<patterns>
-				<pattern>#maVar#</pattern>
-		
+				<pattern>#key#</pattern>
+				<pattern>#val#</pattern>
 			</patterns>
 			<code><![CDATA[
-	public function maFunction(){
-		//#maVar#
-	}
+				'#key#'=>'#val#',
 			]]></code>
-		</monSnippet>
+		</dataRow>
 
-	
+
+
 	</snippets>
-	<path>
-		<directory>module/#examplemodule#</directory>
-	</path>
-	<target>repertoire/model_#maTable#.php</target>
+	<target>model/model_#maTable#.php</target>
 </main>

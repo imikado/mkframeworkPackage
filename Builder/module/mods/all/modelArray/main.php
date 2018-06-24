@@ -7,17 +7,17 @@ class module_mods_all_modelArray extends abstract_moduleBuilder{
 	private $msg=null;
 	private $detail=null;
 	private $tError=null;
-	
+
 	public function _index(){
 		$tMessage=$this->process();
 
 		$oTpl= $this->getView('index');
 		//$oTpl->var=$var;
-		
+
 		$oTpl->msg=$this->msg;
 		$oTpl->detail=$this->detail;
 		$oTpl->tError=$this->tError;
-		
+
 		return $oTpl;
 	}
 	private function process(){
@@ -25,22 +25,36 @@ class module_mods_all_modelArray extends abstract_moduleBuilder{
 			return null;
 		}
 
-		$this->msg=tr('coucheModeleGenereAvecSucces');
-		$this->detail=trR('CreationDuFichierVAR',array('#FICHIER#'=>'model/model_'.$sTable));
+		$sTable=_root::getParam('maTable');
 
-		$this->projectMkdir('module/'.$sModuleMenuName);
+		$this->msg=tr('coucheModeleGenereAvecSucces');
+		$this->detail=trR('CreationDuFichierVAR',array('#FICHIER#'=>'model/model_'.$sTable.'.php'));
 
 		/*SOURCE*/$oSourceModel=$this->getObjectSource('example.php');
-		/*SOURCE*/$oSourceModel->setPattern('#maTable#',$maTable);
+		/*SOURCE*/$oSourceModel->setPattern('#maTable#',$sTable);
 
-		$sSnippet=$oSourceModel->getSnippet(
-							'monSnippet',
-							array(
-								'#maVar#'=>$maValeur)
-							);
+		$sData=null;
 
-		/*SOURCE*/$oSourceModel->setPattern('#sSnippet#',$sSnippet);
+		$tKey=_root::getParam('cle');
+		$tVal=_root::getParam('val');
+
+		foreach($tKey as $i => $sKey){
+			$sVal=$tVal[$i];
+
+			$sData.=$oSourceModel->getSnippet(
+								'dataRow',
+								array(
+									'#key#'=>$sKey,
+									'#val#'=>$sVal
+								)
+			);
+		}
+
+
+
+		/*SOURCE*/$oSourceModel->setPattern('#data#',$sData);
 		/*SOURCE*/$oSourceModel->save();
+
 	}
 
 }
