@@ -197,7 +197,7 @@ class _file{
 		chmod($this->_sAdresse,$iVal);
 	}
 	
-	private function verif(){
+	protected function verif(){
 		if(!$this->exist()){
 			throw new Exception($this->_sAdresse.' n\'existe pas');
 		}

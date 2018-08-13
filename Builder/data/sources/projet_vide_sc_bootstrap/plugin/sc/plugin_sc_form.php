@@ -44,6 +44,7 @@ class plugin_sc_form {
 
 	public function loadPost(){
 		if(_root::getRequest()->isPost() ){
+			$this->isPost=true;
 			$this->tPost=_root::getRequest()->getParams();
 		}
 	}

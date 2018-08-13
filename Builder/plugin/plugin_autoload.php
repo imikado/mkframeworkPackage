@@ -6,6 +6,8 @@ class plugin_autoload{
 		$tab=preg_split('/_/',$sClass);
 		if($sClass[0]=='_'){
 			include _root::getConfigVar('path.lib').'class'.$sClass.'.php';
+		}else if(in_array($sClass,array('abstract_moduleBuilder','abstract_moduleBuilderEngine'))){
+			include '../inc/'.$sClass.'.php';
 		}else if(in_array($tab[0],array('plugin','model','abstract'))){
 			include _root::getConfigVar('path.'.$tab[0]).$sClass.'.php';
 		}else if($tab[0]=='module'){

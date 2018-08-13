@@ -146,7 +146,7 @@ class _root{
 
 		$string=trim($string);
 
-		return preg_replace('/\\x00/','', preg_replace('/\\\0/','',$string));
+		return preg_replace('/\x00/','', preg_replace('/\0/','',$string));
 	}
 
 	public static function startSession(){

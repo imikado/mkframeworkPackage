@@ -1,0 +1,19 @@
+<phpunit bootstrap="inc/bootstrap.php" colors="true">
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">..</directory>
+			<exclude>
+				<directory suffix=".php">../tests/*</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+	<testsuites>
+		<testsuite name="UnitaireSuite">
+			<directory suffix=".php">./unitaire/</directory>
+		</testsuite>
+	</testsuites>
+	<php>
+		<includePath></includePath>
+	</php>
+</phpunit>
+

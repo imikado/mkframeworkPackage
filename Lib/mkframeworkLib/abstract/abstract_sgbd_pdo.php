@@ -28,9 +28,9 @@ abstract class abstract_sgbd_pdo{
 	protected $_pDb;
 	protected $_sReq;
 	protected $_tId;
-	
+
 	private static $_tInstance=array();
-	
+
 	/**
 	* @access public
 	* @return une object
@@ -40,11 +40,11 @@ abstract class abstract_sgbd_pdo{
 			$oSgbd = new $class();
 			$oSgbd->chooseConfig($sConfig);
 			self::$_tInstance[$class][$sConfig]=$oSgbd;
-			
+
 		}
 		return self::$_tInstance[$class][$sConfig];
 	}
-	
+
 	/**
 	* force la classe row
 	* @access public
@@ -73,12 +73,12 @@ abstract class abstract_sgbd_pdo{
 	public function getRequete(){
 		return $this->_sReq;
 	}
-	
+
 	public function getInsertFromTab($tProperty){
-		
+
 		$sCols='';
 		$sVals='';
-		
+
 		if($tProperty){
 			$tKey=array_keys($tProperty);
 			foreach($tKey as $sVar){
@@ -110,12 +110,12 @@ abstract class abstract_sgbd_pdo{
 				$sWhere.=$sVar.'=?';
 			}
 		}
-		
+
 		return $sWhere;
 	}
 
 
-	private function getRequestAndParam($tReq){
+	protected function getRequestAndParam($tReq){
 		$sReq=null;
 		$tParam=null;
 		if(is_array($tReq)){
@@ -132,27 +132,19 @@ abstract class abstract_sgbd_pdo{
 
 		return array($sReq,$tParam);
 	}
-	
+
 	public function findManySimple($tSql,$sClassRow){
 		list($sReq,$tParam)=$this->getRequestAndParam($tSql);
 
 		$pRs=$this->query($sReq,$tParam);
-		
-		if(!$pRs){
-			return null;
-		}
-		
+
 		return $pRs->fetchAll(PDO::FETCH_OBJ);
 	}
 	public function findMany($tSql,$sClassRow){
 		list($sReq,$tParam)=$this->getRequestAndParam($tSql);
 
 		$pRs=$this->query($sReq,$tParam);
-		
-		if(!$pRs){
-			return null;
-		}
-			
+
 		$tObj=array();
 		while($tRow=$pRs->fetch(PDO::FETCH_ASSOC)){
 			$oRow=new $sClassRow($tRow);
@@ -166,13 +158,13 @@ abstract class abstract_sgbd_pdo{
 		$pRs=$this->query($sReq,$tParam);
 
 		$tRow=$pRs->fetch(PDO::FETCH_ASSOC);
-		
+
 		if(empty($tRow) ){
 			return null;
 		}
-			
+
 		$oRow=new $sClassRow($tRow);
-		
+
 		return $oRow;
 	}
 	public function findOneSimple($tSql,$sClassRow){
@@ -181,11 +173,11 @@ abstract class abstract_sgbd_pdo{
 		$pRs=$this->query($sReq,$tParam);
 
 		$oRow=$pRs->fetch(PDO::FETCH_OBJ);
-		
+
 		if(empty($oRow) ){
 			return null;
 		}
-		
+
 		return $oRow;
 	}
 	public function execute($tSql){
@@ -193,7 +185,7 @@ abstract class abstract_sgbd_pdo{
 
 		return $this->query($sReq,$tParam);
 	}
-	
+
 	public function update($sTable,$tProperty,$tWhere){
 
 		$sReq='UPDATE '.$sTable.' SET '.$this->getUpdateFromTab($tProperty).' WHERE '.$this->getWhereFromTab($tWhere);
@@ -208,7 +200,7 @@ abstract class abstract_sgbd_pdo{
 		$tParam=array_values($tProperty);
 
 		$this->query($sReq,$tParam);
-		
+
 		return $this->getLastInsertId();
 	}
 
@@ -224,12 +216,12 @@ abstract class abstract_sgbd_pdo{
 		$this->connect();
 		return $this->_pDb;
 	}
-	
+
 	protected function query($sReq,$tParam=null){
 		if($tParam==null){
 			$tParam=array();
 		}
-		
+
 		$tATTRERRMODE=array(
 			'SILENT' => PDO::ERRMODE_SILENT,
 			'WARNING' => PDO::ERRMODE_WARNING,
@@ -240,23 +232,21 @@ abstract class abstract_sgbd_pdo{
 			'NATURAL' => PDO::CASE_NATURAL,
 			'UPPER' => PDO::CASE_UPPER,
 		);
-		
-		
+
+
 		$this->connect();
 		$this->_sReq=$sReq.' [ '.implode(' | ',$tParam).' ]';
-		$this->_pDb->setAttribute(PDO::ATTR_ERRMODE, $tATTRERRMODE[ trim(_root::getConfigVar('pdo.ATTR_ERRMODE','WARNING')) ] ); 
-		$this->_pDb->setAttribute(PDO::ATTR_CASE, $tATTRCASE[ trim(_root::getConfigVar('pdo.ATTR_CASE','NATURAL')) ] ); 
+		$this->_pDb->setAttribute(PDO::ATTR_ERRMODE, $tATTRERRMODE[ trim(_root::getConfigVar('pdo.ATTR_ERRMODE','WARNING')) ] );
+		$this->_pDb->setAttribute(PDO::ATTR_CASE, $tATTRCASE[ trim(_root::getConfigVar('pdo.ATTR_CASE','NATURAL')) ] );
 		$sth = $this->_pDb->prepare($sReq);
-		if(is_array($tParam)){
-			$sth->execute($tParam);
-		}else{
-			$sth->execute();
-		}
+
+		$sth->execute($tParam);
+
 		return $sth;
 	}
 
 	public function erreur($sErreur){
 		throw new Exception($sErreur);
 	}
-	
+
 }

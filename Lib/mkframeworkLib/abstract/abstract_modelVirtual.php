@@ -21,33 +21,18 @@ along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
 * @link http://mkf.mkdevs.com/
 */
 class abstract_modelVirtual{
-    
+
     protected $tColumn;
     protected $tLine;
     protected $oCache;
-    
+
     public static $_toInstance=null;
-    
+
     public static function _getInstance($sClass){
         if(isset(self::$_toInstance[$sClass])==false){
             self::$_toInstance[$sClass]=new $sClass();
         }
         return self::$_toInstance[$sClass];
-    }
-    
-    public function isCached(){
-        $this->oCache=new _cacheVar();
-        if($this->bCacheEnabled==true and $this->oCache->isCached($this->sCacheId,$this->iCacheLifetime)){
-            $this->tLine=$this->oCache->getCached($this->sCacheId);
-            return true;
-        }
-        return false;
-    }
-    
-    public function storeCache(){
-        if($this->bCacheEnabled==true){
-            $this->oCache->setCache($this->sCacheId,$this->tLine);
-        }
     }
 
     public function findMany($tSql,$sClassRow=null){
@@ -74,13 +59,13 @@ class abstract_modelVirtual{
     public function findOneSimple($tSql,$sClassRow=null){
 		return $this->findOne($tSql,$sClassRow=null);
     }
-    
+
     private function query($sReq,$sClassRow){
 		//traitement de la requete $sReq
 		$sReq=trim($sReq);
 		$this->_sReq=$sReq;
 		if(substr($sReq,0,6)== 'SELECT'){
-			
+
 			$tReq=$this->explainSql($sReq);
 
 			//count
@@ -89,11 +74,11 @@ class abstract_modelVirtual{
 			if(isset($tReq['select']) and preg_match('/COUNT\(/i',$tReq['select'])){
 				$bCount=true;
 			}
-			
+
 			$tCritere=$this->findListCritere($tReq);
-			
+
 			$sTable=trim($tReq['from']);
-			
+
 			$tObj=$this->findInTableWithCritere($sClassRow,$sTable,$tCritere);
 
 			//count
@@ -108,19 +93,19 @@ class abstract_modelVirtual{
 				return $tObj;
 			}
 		}
-		
-		
-		
+
+
+
 	}
 	private function explainSql($sReq){
 		if(
 			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)WHERE(?<where>.*)ORDER BY(?<order>.*)LIMIT(?<limit>.*)/i'
 			,$sReq,$tResult,PREG_SET_ORDER)
 			or
-                        
+
 			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)WHERE(?<where>.*)ORDER BY(?<order>.*)/i'
 			,$sReq,$tResult,PREG_SET_ORDER)
-			
+
                         or
 			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)ORDER BY(?<order>.*)LIMIT(?<limit>.*)/i',$sReq,$tResult,PREG_SET_ORDER)
                         or
@@ -131,13 +116,13 @@ class abstract_modelVirtual{
 			preg_match_all('/^SELECT(?<select>.*)FROM(?<from>.*)/i',$sReq,$tResult,PREG_SET_ORDER)
 		){
 			if(isset($tResult[0]['where']) and preg_match('/ or /i',$tResult[0]['where'])){
-				$this->erreur('Requete non supportee : '.$sReq.$msg);
+				$this->erreur('Requete non supportee : '.$sReq);
 			}elseif(isset($tResult[0]['order']) and !preg_match('/\s[ASC|DESC]/i',trim($tResult[0]['order'])) ){
-				$this->erreur('Il faut definir un sens de tri: ASC ou DESC dans la requete'.$sReq.$msg);
+				$this->erreur('Il faut definir un sens de tri: ASC ou DESC dans la requete'.$sReq);
 			}else{
 				return $tResult[0];
 			}
-			
+
 		}else{
 			$msg="\n\n";
 			$msg.="Le driver virtual gere les requetes de type : \n";
@@ -146,18 +131,18 @@ class abstract_modelVirtual{
 			$msg.="- SELECT liste_des_champs FROM ma_table WHERE champ=valeur \n";
 			$msg.="- SELECT liste_des_champs FROM ma_table  \n";
 			$msg.=" la clause where accepte uniquement champ=valeur, champ!=valeur et AND \n";
-			
+
 			$this->erreur('Requete non supportee : '.$sReq.$msg);
 		}
 	}
 	private function findListCritere($tReq){
 		$tCritere=array();
-		
+
 		if(isset($tReq['where'])){
 			if(preg_match('/ and /i',$tReq['where'])){
 				$tWhere=preg_split('/ AND /i',$tReq['where']);
 				foreach($tWhere as $sWhereVal){
-					if(preg_match('/!=/',$sWhereVal)){ 
+					if(preg_match('/!=/',$sWhereVal)){
 						list($sVar,$sVal)=preg_split('/!=/',$sWhereVal);
 						$tCritere[trim($sVar)]='!'.trim($sVal);
 					}elseif(preg_match('/=/',$sWhereVal)){
@@ -174,12 +159,12 @@ class abstract_modelVirtual{
 					$tCritere[trim($sVar)]='='.trim($sVal);
 				}
 			}
-			
+
 		}
 		return $tCritere;
 	}
 	private function sortResult($tObj,$tReq){
-		
+
 		list($sChamp,$sSens)=preg_split('/ /',trim($tReq['order']));
 
 		$sSens=trim(strtoupper($sSens));
@@ -187,8 +172,8 @@ class abstract_modelVirtual{
 		if(!in_array($sChamp,$this->tColumn)){
 			$this->erreur('Champ "'.$sChamp.'" inexistant dans cette table virtuelle, champs disponibles (sensible a la casse): '.implode(',',$this->tColumn).' (requete executee :"'.$this->_sReq.'"	)');
 		}
-		
-		
+
+
 		$tTri=array();
 		$tIdObj=array();
 		foreach($tObj as $i => $oObj){
@@ -201,7 +186,7 @@ class abstract_modelVirtual{
 		}else{
 			asort($tTri);
 		}
-                
+
 		if(isset($tReq['limit'])){
 
 			list($iOffset,$iLimit)=preg_split('/,/',trim($tReq['limit']));
@@ -237,80 +222,75 @@ class abstract_modelVirtual{
 	}
 	private function findInTableWithCritere($sClassRow,$sTable,$tCritere){
 		$tFile=$this->getTabFromFile($this->tLine);
-			
+
 		$tObj=array();
 		foreach($tFile as $oRow){
-			
+
 			foreach($tCritere as $sCritereField => $sCritereVal){
-				
-				if(!isset($oRow->$sCritereField) or 
+
+				if(!isset($oRow->$sCritereField) or
 					(
-						($sCritereVal[0]=='=' and (string)$sCritereVal!=(string)'='.$tRow->$sCritereField)
-						
+						($sCritereVal[0]=='=' and (string)$sCritereVal!=(string)'='.$oRow->$sCritereField)
+
 						or
-						
-						($sCritereVal[0]=='!' and (string)$sCritereVal==(string)'!'.$tRow->$sCritereField)
+
+						($sCritereVal[0]=='!' and (string)$sCritereVal==(string)'!'.$oRow->$sCritereField)
 					)
 				){
 					continue 2;
 				}
 			}
-			
-			
+
+
 			$tObj[]=$oRow;
-			
+
 		}
-			
+
 		return $tObj;
-		
-		
+
+
 	}
-        
+
 	public function getTabFromFile($tContent){
-		
+
 		$tHeader=$this->tColumn;
-		
+
 		$tab=array();
 		if($tContent){
 		foreach($tContent as $i => $tLigne){
-			 
+
 			$obj=new stdclass();
 			foreach($tHeader as $i => $sHeader){
 				$obj->$sHeader=$tLigne[$i];
 			}
 			$tab[]=$obj;
-			
+
 			}
 		}
 		return $tab;
-		
+
 	}
-   
-    
+
+
     public function setColumns($tColumn){
         $this->tColumn=$tColumn;
     }
-    
-    public function addLine($tValue){
-        
-        $this->tLine[]=$tValue;
-    }
-	
+
 	public function addObject($obj){
-		
+
 		foreach($this->tColumn as $i => $column){
 			$tValue[$i]=null;
 			if(isset($obj->$column)){
 				$tValue[$i]=$obj->$column;
 			}
 		}
-		
+
 		$this->tLine[]=$tValue;
 	}
-    
+
     public function bind($tReq){
 		$sReq='';
-		
+
 		if(is_array($tReq)){
 			$sReq=$tReq[0];
 			if(isset($tReq[1]) and is_array($tReq[1])){
@@ -319,7 +299,7 @@ class abstract_modelVirtual{
 				unset($tReq[0]);
 				$tParam=array_values($tReq);
 			}
-			
+
 			foreach($tParam as $sVal){
 				$sVal=$this->quote($sVal);
 				$sReq=preg_replace('/[?]/',$sVal,$sReq,1);
@@ -327,12 +307,12 @@ class abstract_modelVirtual{
 		}else{
 			return $tReq;
 		}
-			
+
 		return $sReq;
 	}
-	
+
 	public function erreur($sErreur){
 		throw new Exception($sErreur);
 	}
-    
+
 }
