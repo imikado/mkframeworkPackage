@@ -17,319 +17,331 @@
 
  */
 
-class module_builder extends abstract_module {
-
-	public static $oTools;
-	public static $sLayout;
-	
-	protected $oBuilderJson;
-	protected $oLibJson;
-	protected $sMinLibVersion;
-	
-	public function getComposer($sFile_){
-		return json_decode(file_get_contents($sFile_));
-	}
-	
-	public function checkMinVersion($sMinVersion_,$sVersion_){
-		//X,Y,Z
-		list($xMin,$yMin,$zMin)=explode('.',$sMinVersion_);
-		
-		list($xCurr,$yCurr,$zCurr)=explode('.',$sVersion_);
-		
-		if($xCurr < $xMin){
-			return false;
-		}
-		
-		if($yCurr < $yMin){
-			return false;
-		}
-		
-		if($zCurr < $zMin){
-			return false;
-		}
-	
-		return true;
-	}
-
-	public static function setLayout($sLayout) {
-		if (!in_array($sLayout, array('templateProjet', 'templateProjetLight'))) {
-			return;
-		}
-		self::$sLayout = $sLayout;
-	}
-
-	public static function getTools() {
-		return self::$oTools;
-	}
-
-	public function before() {
-		$this->oBuilderJson=$this->getComposer(__DIR__.'/../../composer.json');
-		
-		$this->oLibJson=$this->getComposer(_root::getConfigVar('path.lib').'/composer.json');
-		
-		$this->sMinLibVersion=_root::getConfigVar('dependencies.framework.version.min');
-	
-		self::$oTools = new module_builderTools();
-
-		$this->oLayout = new _layout('template1');
-		
-		$oMenu=new module_menu();
-		$oMenu->oBuilderJson=$this->oBuilderJson;
-		$oMenu->oLibJson=$this->oLibJson;
-
-		$this->oLayout->add('menu', $oMenu->_index() );
-		
-		if(false==$this->checkMinVersion($this->sMinLibVersion,$this->oLibJson->version) ){
-			$this->errorVersionLib();
-		}
-	}
-	
-	public function errorVersionLib(){
-		
-		$oTpl = new _tpl('builder::errorVersionLib');
-		$oTpl->oBuilderJson=$this->oBuilderJson;
-		$oTpl->oLibJson=$this->oLibJson;
-		$oTpl->sMinLibVersion=$this->sMinLibVersion;
-	
-		$this->oLayout->add('main', $oTpl);
-		$this->after();exit;
-	}
-
-	private function getList() {
-		$oProjetModel = new model_mkfbuilderprojet;
-		$tProjet = $oProjetModel->findAll();
-
-		sort($tProjet); //tri par ordre alphabetique
-
-		$oTpl = new _tpl('builder::list');
-		$oTpl->tProjet = $tProjet;
-
-		return $oTpl;
-	}
-
-	public function _index() {
-		_root::redirect('builder::new');
-	}
-
-	public function _list() {
-
-		$oTpl = $this->getList();
-
-		$this->oLayout->add('main', $oTpl);
-	}
-
-	public function _new() {
-		if (_root::getRequest()->isPost()) {
+class module_builder extends abstract_module
+{
+    public static $oTools;
+    public static $sLayout;
 
-			$sProject = _root::getParam('projet');
-			$sOpt = _root::getParam('opt');
+    protected $oBuilderJson;
+    protected $oLibJson;
+    protected $sMinLibVersion;
 
-			if ($sOpt == 'withexamples') {
-				model_mkfbuilderprojet::getInstance()->create(_root::getParam('projet'));
-				self::getTools()->updateLayoutTitle(_root::getParam('projet'));
-			} else if ($sOpt == 'withBootstrap') {
-				model_mkfbuilderprojet::getInstance()->createEmpty($sProject);
+    public function getComposer($sFile_)
+    {
+        return json_decode(file_get_contents($sFile_));
+    }
+
+    public function checkMinVersion($sMinVersion_, $sVersion_)
+    {
+        //X,Y,Z
+        list($xMin, $yMin, $zMin)=explode('.', $sMinVersion_);
+
+        list($xCurr, $yCurr, $zCurr)=explode('.', $sVersion_);
+
+        if ($xCurr < $xMin) {
+            return false;
+        }
 
-				//copy bootstrap
-				model_mkfbuilderprojet::getInstance()->copyFromTo(_root::getConfigVar('path.sources').'fichiers/layout/bootstrap.php', _root::getConfigVar('path.generation') . $sProject . '/layout/bootstrap.php');
+        if ($yCurr < $yMin) {
+            return false;
+        }
 
-				//update title
-				self::getTools()->updateFile(_root::getParam('projet'), array('examplesite' => $sProject), 'layout/bootstrap.php');
+        if ($zCurr < $zMin) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function setLayout($sLayout)
+    {
+        if (!in_array($sLayout, array('templateProjet', 'templateProjetLight'))) {
+            return;
+        }
+        self::$sLayout = $sLayout;
+    }
+
+    public static function getTools()
+    {
+        return self::$oTools;
+    }
+
+    public function before()
+    {
+        $this->oBuilderJson=$this->getComposer(__DIR__.'/../../composer.json');
+
+        $this->oLibJson=$this->getComposer(_root::getConfigVar('path.lib').'/composer.json');
+
+        $this->sMinLibVersion=_root::getConfigVar('dependencies.framework.version.min');
+
+        self::$oTools = new module_builderTools();
+
+        $this->oLayout = new _layout('template1');
 
-				//update layout
-				self::getTools()->updateFile(_root::getParam('projet'), array('template1' => 'bootstrap'), 'module/default/main.php');
-			} else if ($sOpt == 'scWithBootstrap') {
-				model_mkfbuilderprojet::getInstance()->createScWithBootstrap($sProject);
-			} else {
-				model_mkfbuilderprojet::getInstance()->createEmpty(_root::getParam('projet'));
-				self::getTools()->updateLayoutTitle(_root::getParam('projet'));
-			}
-			_root::redirect('builder::list');
-		}
+        $oMenu=new module_menu();
+        $oMenu->oBuilderJson=$this->oBuilderJson;
+        $oMenu->oLibJson=$this->oLibJson;
 
-		$oTpl = new _tpl('builder::new');
-		$oTpl->iswritable = is_writable(_root::getConfigVar('path.generation'));
+        $this->oLayout->add('menu', $oMenu->_index());
 
-		$this->oLayout->add('main', $oTpl);
-	}
+        if (false==$this->checkMinVersion($this->sMinLibVersion, $this->oLibJson->version)) {
+            $this->errorVersionLib();
+        }
+    }
 
-	public function _marketBuilder() {
-		$this->oLayout->addModule('main', 'mods_builder_market::menu');
-		$this->oLayout->addModule('main', 'mods_builder_market::index');
-	}
+    public function errorVersionLib()
+    {
+        $oTpl = new _tpl('builder::errorVersionLib');
+        $oTpl->oBuilderJson=$this->oBuilderJson;
+        $oTpl->oLibJson=$this->oLibJson;
+        $oTpl->sMinLibVersion=$this->sMinLibVersion;
 
-	public function _export() {
-		$tReturn = $this->processExport();
+        $this->oLayout->add('main', $oTpl);
+        $this->after();
+        exit;
+    }
 
-		$this->oLayout->setLayout('templateProjet');
+    private function getList()
+    {
+        $oProjetModel = new model_mkfbuilderprojet;
+        $tProjet = $oProjetModel->findAll();
 
-		$oTplList = $this->getList();
+        sort($tProjet); //tri par ordre alphabetique
 
-		$this->oLayout->add('list', $oTplList);
+        $oTpl = new _tpl('builder::list');
+        $oTpl->tProjet = $tProjet;
 
-		$this->oLayout->addModule('nav', 'menu::export');
+        return $oTpl;
+    }
 
-		$oTpl = new _tpl('builder::export');
-		$oTpl->tReturn = $tReturn;
+    public function _index()
+    {
+        _root::redirect('builder::new');
+    }
 
+    public function _list()
+    {
+        $oTpl = $this->getList();
 
-		$this->oLayout->add('main', $oTpl);
-	}
+        $this->oLayout->add('main', $oTpl);
+    }
 
-	private function processExport() {
-		if (!_root::getRequest()->isPost()) {
-			return array();
-		}
+    public function _new()
+    {
+        if (_root::getRequest()->isPost()) {
+            $sProject = _root::getParam('projet');
+            $sOpt = _root::getParam('opt');
 
+            if ($sOpt == 'withexamples') {
+                model_mkfbuilderprojet::getInstance()->create(_root::getParam('projet'));
+                self::getTools()->updateLayoutTitle(_root::getParam('projet'));
+            } elseif ($sOpt == 'withBootstrap') {
+                model_mkfbuilderprojet::getInstance()->createEmpty($sProject);
 
-		$sFrom = _root::getConfigVar('path.generation') . _root::getParam('from') . '/';
-		$sTo = _root::getParam('to') . '/' . _root::getParam('from');
+                //copy bootstrap
+                model_mkfbuilderprojet::getInstance()->copyFromTo(_root::getConfigVar('path.sources').'fichiers/layout/bootstrap.php', _root::getConfigVar('path.generation') . $sProject . '/layout/bootstrap.php');
 
-		$oDir = new _dir($sTo);
-		if ($oDir->exist()) {
-			return array('error' => 'Repertoire ' . $sTo . ' existe deja');
-		}
+                //update title
+                self::getTools()->updateFile(_root::getParam('projet'), array('examplesite' => $sProject), 'layout/bootstrap.php');
 
-		if (!in_array(_root::getParam('lib'), array('link', 'copy'))) {
-			return array('error' => 'Veuillez s&eacute;lectionner un choix pour la librairie du framework');
-		}
+                //update layout
+                self::getTools()->updateFile(_root::getParam('projet'), array('template1' => 'bootstrap'), 'module/default/main.php');
+            } elseif ($sOpt == 'scWithBootstrap') {
+                model_mkfbuilderprojet::getInstance()->createScWithBootstrap($sProject);
+            } else {
+                model_mkfbuilderprojet::getInstance()->createEmpty(_root::getParam('projet'));
+                self::getTools()->updateLayoutTitle(_root::getParam('projet'));
+            }
+            _root::redirect('builder::list');
+        }
 
-		$oModelProject = model_mkfbuilderprojet::getInstance()->copyFromTo($sFrom, $sTo);
+        $oTpl = new _tpl('builder::new');
+        $oTpl->iswritable = is_writable(_root::getConfigVar('path.generation'));
 
-		if (_root::getParam('lib') == 'link') {
+        $this->oLayout->add('main', $oTpl);
+    }
 
-			$sLib = __DIR__;
-			$sLib = str_replace('module/builder', 'lib/framework/', $sLib);
+    public function _marketBuilder()
+    {
+        $this->oLayout->addModule('main', 'mods_builder_market::menu');
+        $this->oLayout->addModule('main', 'mods_builder_market::index');
+    }
 
-			$this->updateLibPathInConf($sTo, $sLib);
+    public function _export()
+    {
+        $tReturn = $this->processExport();
 
-			$detail = 'Projet cr&eacute;e dans ' . $sTo;
-			$detail .= '<br/>Dans votre projet, la librairie du framework pointe sur ' . $sLib;
+        $this->oLayout->setLayout('templateProjet');
 
-			return array('ok' => 'Projet bien export&eacute; sur ' . $sTo, 'detail' => $detail);
-		} else if (_root::getParam('lib') == 'copy') {
+        //$oTplList = $this->getList();
 
-			$oDir = new _dir($sTo . '/lib/');
-			$oDir->save();
-			//copy du framework
-			$oModelProject = model_mkfbuilderprojet::getInstance()->copyFromTo('lib/framework', $sTo . '/lib/mkframework');
+        //$this->oLayout->add('list', $oTplList);
 
-			$sLib = '../lib/mkframework/';
+        $this->oLayout->addModule('nav', 'menu::export');
 
-			$this->updateLibPathInConf($sTo, $sLib);
+        $oTpl = new _tpl('builder::export');
+        $oTpl->sPathGenere=_root::getConfigVar('path.generation').'/'._root::getParam('id');
+        $oTpl->tReturn = $tReturn;
 
-			$detail = 'Projet cr&eacute;e dans ' . $sTo;
-			$detail .= '<br/>Dans votre projet, la librairie du framework a ete copie dans ' . $sLib;
 
-			return array('ok' => 'Projet bien export&eacute; sur ' . $sTo, 'detail' => $detail);
-		}
-	}
+        $this->oLayout->add('main', $oTpl);
+    }
 
-	private function updateLibPathInConf($sProject, $sLib) {
-		//replace link library
-		$oIniFile = new _file($sProject . '/conf/site.ini.php');
-		$tIni = $oIniFile->getTab();
+    private function processExport()
+    {
+        if (!_root::getRequest()->isPost()) {
+            return array();
+        }
 
-		$tNewIni = array();
 
-		$bSection = 0;
-		foreach ($tIni as $line) {
-			if (preg_match('/\[path\]/', $line)) {
-				$bSection = 1;
-			} else if ($bSection && substr($line, 0, 3) == 'lib') {
-				$line = 'lib=' . $sLib;
-			}
+        $sFrom = _root::getConfigVar('path.generation') . _root::getParam('from') . '/';
+        $sTo = _root::getParam('path') . '/' . _root::getParam('id');
 
-			$tNewIni[] = $line;
-		}
+        $oDir = new _dir($sTo);
+        if ($oDir->exist()) {
+            return array('error' => 'Repertoire ' . $sTo . ' existe deja');
+        }
 
-		$oIniFile->setContent(implode($tNewIni, ""));
-		$oIniFile->save();
-	}
+        if (!in_array(_root::getParam('lib'), array('link', 'copy'))) {
+            return array('error' => 'Veuillez s&eacute;lectionner un choix pour la librairie du framework');
+        }
 
-	public function _edit() {
+        $oModelProject = model_mkfbuilderprojet::getInstance()->copyFromTo($sFrom, $sTo);
 
-		self::setLayout('templateProjet');
-		//$this->oLayout->setLayout('templateProjet');
-		//$oTplList=$this->getList();
-		//$this->oLayout->add('list',$oTplList);
+        if (_root::getParam('lib') == 'link') {
+            $sLib = realpath(__DIR__.'/../'._root::getConfigVar('path.lib')).'/';
 
-		$this->oLayout->addModule('nav', 'mods_builder_menu::project');
+            $this->updateLibPathInConf($sTo, $sLib);
 
-		if (_root::getParam('action')) {
-			$oTpl = new _tpl('builder::edit');
-			$this->oLayout->add('main', $oTpl);
-		}
+            $detail = 'Projet cr&eacute;e dans ' . $sTo;
+            $detail .= '<br/>Dans votre projet, la librairie du framework pointe sur ' . $sLib;
 
-		if (_root::getParam('action')) {
-			$this->oLayout->addModule('main', _root::getParam('action'));
-		}
+            return array('ok' => 'Projet bien export&eacute; sur ' . $sTo, 'detail' => $detail);
+        } elseif (_root::getParam('lib') == 'copy') {
+            $oDir = new _dir($sTo . '/lib/');
+            $oDir->save();
+            //copy du framework
+            $oModelProject = model_mkfbuilderprojet::getInstance()->copyFromTo(_root::getConfigVar('path.lib'), $sTo . '/lib/mkframework');
 
-		$this->oLayout->setLayout(self::$sLayout);
-	}
+            $sLib = '../lib/mkframework/';
 
-	public function _editembedded() {
-		$this->oLayout->setLayout('templateProjetEmbedded');
+            $this->updateLibPathInConf($sTo, $sLib);
 
-		$this->oLayout->addModule('nav', 'menu::projetEmbedded');
+            $detail = 'Projet cr&eacute;e dans ' . $sTo;
+            $detail .= '<br/>Dans votre projet, la librairie du framework a ete copie dans ' . $sLib;
 
-		$oTpl = new _tpl('builder::edit');
-		$this->oLayout->add('main', $oTpl);
+            return array('ok' => 'Projet bien export&eacute; sur ' . $sTo, 'detail' => $detail);
+        }
+    }
 
-		if (_root::getParam('action')) {
-			$this->oLayout->addModule('main', _root::getParam('action'));
-		}
-	}
+    private function updateLibPathInConf($sProject, $sLib)
+    {
+        //replace link library
+        $oIniFile = new _file($sProject . '/conf/path.ini.php');
+        $tIni = $oIniFile->getTab();
 
-	public function _lang() {
-		$sLang = _root::getParam('switch');
+        $tNewIni = array();
 
-		$bChange = false;
-		$iswritable = true;
-		$messageOK = null;
-		$messageNOK = null;
-		$message = null;
+        $bSection = 0;
+        foreach ($tIni as $line) {
+            $line=trim($line);
+            if (preg_match('/\[path\]/', $line)) {
+                $bSection = 1;
+            } elseif ($bSection && substr($line, 0, 3) == 'lib') {
+                $line = 'lib=' . $sLib;
+            }
 
-		if (_root::getConfigVar('language.default') != $sLang) {
-			$bChange = true;
+            $tNewIni[] = $line;
+        }
 
-			$ret = "\n";
+        $oIniFile->setContent(implode("\n", $tNewIni));
+        $oIniFile->save();
+    }
 
-			$sContent = null;
-			$sContent .= '[language]' . $ret;
-			$sContent .= ';fr / en...' . $ret;
-			$sContent .= 'default=' . $sLang . $ret;
-			$sContent .= 'allow=fr,en' . $ret;
+    public function _edit()
+    {
+        self::setLayout('templateProjet');
+        //$this->oLayout->setLayout('templateProjet');
+        //$oTplList=$this->getList();
+        //$this->oLayout->add('list',$oTplList);
 
-			//check writable
-			$iswritable = is_writable(_root::getConfigVar('path.conf') . 'language.ini.php');
-			if ($iswritable) {
-				file_put_contents(_root::getConfigVar('path.conf') . 'language.ini.php', $sContent);
+        $this->oLayout->addModule('nav', 'mods_builder_menu::project');
 
-				_root::redirect('builder::new');
-			} else {
-				$messageNOK = sprintf(tr('builder::new_errorVotreRepertoirePasInscriptible'), _root::getConfigVar('path.conf') . 'language.ini.php');
+        if (_root::getParam('action')) {
+            $oTpl = new _tpl('builder::edit');
+            $this->oLayout->add('main', $oTpl);
+        }
 
-				$message = sprintf(tr('builder::langVousPouvezEcrire'), $sContent, _root::getConfigVar('path.conf') . 'language.ini.php');
-			}
-		} else {
-			$message = sprintf(tr('builder::langVotreLangueEstDeja'), $sLang);
-		}
+        if (_root::getParam('action')) {
+            $this->oLayout->addModule('main', _root::getParam('action'));
+        }
 
-		$oTpl = new _tpl('builder::lang');
-		$oTpl->bChange = $bChange;
-		$oTpl->messageOK = $messageOK;
-		$oTpl->messageNOK = $messageNOK;
-		$oTpl->message = $message;
+        $this->oLayout->setLayout(self::$sLayout);
+    }
 
-		$this->oLayout->add('main', $oTpl);
-	}
+    public function _editembedded()
+    {
+        $this->oLayout->setLayout('templateProjetEmbedded');
 
-	public function after() {
-		$this->oLayout->show();
-	}
+        $this->oLayout->addModule('nav', 'menu::projetEmbedded');
 
-	//------------------------------------------------
+        $oTpl = new _tpl('builder::edit');
+        $this->oLayout->add('main', $oTpl);
+
+        if (_root::getParam('action')) {
+            $this->oLayout->addModule('main', _root::getParam('action'));
+        }
+    }
+
+    public function _lang()
+    {
+        $sLang = _root::getParam('switch');
+
+        $bChange = false;
+        $iswritable = true;
+        $messageOK = null;
+        $messageNOK = null;
+        $message = null;
+
+        if (_root::getConfigVar('language.default') != $sLang) {
+            $bChange = true;
+
+            $ret = "\n";
+
+            $sContent = null;
+            $sContent .= '[language]' . $ret;
+            $sContent .= ';fr / en...' . $ret;
+            $sContent .= 'default=' . $sLang . $ret;
+            $sContent .= 'allow=fr,en' . $ret;
+
+            //check writable
+            $iswritable = is_writable(_root::getConfigVar('path.conf') . 'language.ini.php');
+            if ($iswritable) {
+                file_put_contents(_root::getConfigVar('path.conf') . 'language.ini.php', $sContent);
+
+                _root::redirect('builder::new');
+            } else {
+                $messageNOK = sprintf(tr('builder::new_errorVotreRepertoirePasInscriptible'), _root::getConfigVar('path.conf') . 'language.ini.php');
+
+                $message = sprintf(tr('builder::langVousPouvezEcrire'), $sContent, _root::getConfigVar('path.conf') . 'language.ini.php');
+            }
+        } else {
+            $message = sprintf(tr('builder::langVotreLangueEstDeja'), $sLang);
+        }
+
+        $oTpl = new _tpl('builder::lang');
+        $oTpl->bChange = $bChange;
+        $oTpl->messageOK = $messageOK;
+        $oTpl->messageNOK = $messageNOK;
+        $oTpl->message = $message;
+
+        $this->oLayout->add('main', $oTpl);
+    }
+
+    public function after()
+    {
+        $this->oLayout->show();
+    }
+
+    //------------------------------------------------
 }
-
-?>
