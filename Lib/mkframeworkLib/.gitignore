@@ -1,0 +1,4 @@
+.scannerwork
+phpunitCoverage.sh
+phpunitCoverageDocker.sh
+sonar-project.properties

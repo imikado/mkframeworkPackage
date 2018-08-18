@@ -1,4 +1,4 @@
-Xml<?php
+<?php
 
 require_once(__DIR__.'/../../inc/abstract/abstract_sgbd.php');
 require_once(__DIR__.'/../../../sgbd/sgbd_xml.php');

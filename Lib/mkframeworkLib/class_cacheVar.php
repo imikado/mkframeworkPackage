@@ -41,13 +41,11 @@ class _cacheVar{
 	*/
 	public function isCached($sId,$iMinute=null){
 		$this->load($sId);
-		if($this->_toFile[$sId]->exist()){
-			if($iMinute==null){
-				return true;
-			}else if( (time()-$this->_toFile[$sId]->filemtime()) < ($iMinute*60)){
-				return true;
-			}
-			return false;
+		if(
+			$this->_toFile[$sId]->exist() 
+			and ($iMinute==null or (time()-$this->_toFile[$sId]->filemtime()) < ($iMinute*60))
+		){
+			return true;
 		}
 		return false;
 	}

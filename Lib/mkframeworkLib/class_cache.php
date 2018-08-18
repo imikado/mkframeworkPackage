@@ -31,13 +31,11 @@ class _cache{
 	*/
 	public function isCached($sId,$iMinute=null){
 		$oFile=new _file(_root::getConfigVar('path.cache').$sId.'.cache');
-		if($oFile->exist()){
-			if($iMinute==null){
+		if(
+			$oFile->exist() 
+			and ($iMinute==null or (time()-$oFile->filemtime()) < ($iMinute*60)) 
+		){		
 				return true;
-			}else if( (time()-$oFile->filemtime()) < ($iMinute*60)){		
-				return true;
-			}
-			return false;
 		}
 		return false;
 	}
@@ -48,8 +46,7 @@ class _cache{
 	* @return object _view
 	*/
 	public function getCached($sId){
-		$oView=new _view(_root::getConfigVar('path.cache').$sId.'.cache');
-		return $oView;
+		return new _view(_root::getConfigVar('path.cache').$sId.'.cache');
 	}
 	/** 
 	* met l'objet _view $sId en cache

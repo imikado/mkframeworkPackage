@@ -495,61 +495,6 @@ class classRootTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($oI18nExpected, $oI18n);
     }
 
-    public function test_getI18nShouldFinishKo()
-    {
-        require_once(__DIR__.'/../../tests/inc/fakeDebug.php');
-
-        //arrange
-        $oI18nExpected=new fakeI18n();
-
-        $oRoot = new RootToTest();
-        $oRoot->setConfigVar('site.mode', 'dev');
-        $oRoot->setConfigVar('debug.class', 'fakeDebug');
-
-
-        $oRoot->setConfigVar('language.class', '');
-
-        $errorException=null;
-
-        //act
-        try {
-            $oI18n=$oRoot->getI18n();
-        } catch (Exception $e) {
-            $errorException=$e;
-        }
-
-        //assert
-        $this->assertRegexp('/vous manque/', $errorException->getMessage());
-    }
-
-    public function test_getI18nShouldFinishKo_erreurLog()
-    {
-
-        //arrange
-        $oI18nExpected=new fakeI18n();
-
-        $oRoot = new RootToTest();
-        $oRoot->setConfigVar('site.mode', 'dev');
-        //$oRoot->setConfigVar('debug.class','fakeDebug');
-
-        $oRoot->setConfigVar('path.layout', __DIR__.'/../inc/');
-
-
-        $oRoot->setConfigVar('language.class', '');
-
-        $errorException=null;
-
-        //act
-        try {
-            $oI18n=$oRoot->getI18n();
-        } catch (Exception $e) {
-            $errorException=$e;
-        }
-
-        //assert
-        $this->assertEquals('erreur.php', $errorException->getMessage());
-    }
-
     public function test_resetRequestShouldFinishOk()
     {
         require_once(__DIR__.'/../../class_request.php');
@@ -848,34 +793,6 @@ class classRootTest extends PHPUnit_Framework_TestCase
 
         //assert
         $this->assertEquals($oExpectedLog, $oLog);
-    }
-
-    public function test_getLogShouldFinishOk_erreurLog()
-    {
-        require_once(__DIR__.'/../../tests/inc/fakeLog.php');
-
-        //arrange
-        $oExpectedLog=new fakeLog();
-
-        $oRoot = new RootToTest();
-        $oRoot->setConfigVar('site.mode', 'dev');
-        //$oRoot->setConfigVar('debug.class','fakeDebug');
-        $oRoot->setConfigVar('path.layout', __DIR__.'/../inc/');
-
-
-        $oRoot->setConfigVar('log.class', '');
-
-        $erreurException=null;
-
-        //act
-        try {
-            $oLog=$oRoot->getLog();
-        } catch (Exception $e) {
-            $erreurException=$e;
-        }
-
-        //assert
-        $this->assertEquals('erreur.php', $erreurException->getMessage());
     }
 
     /**

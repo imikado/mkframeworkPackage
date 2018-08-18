@@ -3,7 +3,10 @@
 enabled=0
 ;temps de validite du cache exprime en secondes
 lifetime=0
-autoload.enabled=0
+class=_cache
+
+[cacheVar]
+class=_cacheVar
 
 [encodage]
 ;indique l'encodage des fichiers de code, utilise pour la protection des tableaux de contexte ($_GET,$_POST)
