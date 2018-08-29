@@ -44,19 +44,39 @@
 
 					<table >
 						<tr>
-							<th>Type</th>
+							<td style="font-weight:bold;width:120px">Types</td>
+							<td style="width:120px"></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td>string</td>
+
+							<td>int</td>
+
+							<td>boolean</td>
 						</tr>
 						<tr>
-							<td>int</td>
+							<td>decimal</td>
+
+							<td>float</td>
+
+							<td>double</td>
 						</tr>
+						<tr>
+							<td>time</td>
+
+							<td>date</td>
+
+							<td>base64Binary</td>
+						</tr>
+
 					</table>
 
+					<p>&nbsp;</p>
+
 					<p>*Syntax: param:type</p>
-					<p>Exple: login:string</p>
-					<p>Exple 2: login:string,password:string</p>
+					<p><u>Exemple:</u> login:string</p>
+					<p><u>Exemple avec plusieurs:</u> login:string,password:string</p>
 
 					]]></html>
 			</row>

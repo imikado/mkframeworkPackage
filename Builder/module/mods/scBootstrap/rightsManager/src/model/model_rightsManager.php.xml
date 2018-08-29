@@ -4,6 +4,8 @@
 		<monSnippet>
 			<patterns>
 				<pattern>VARpatternENDVAR</pattern>
+				<pattern>VARrow_rightManagerENDVAR</pattern>
+				<pattern>VARmodel_rightManagerENDVAR</pattern>
 
 			</patterns>
 			<code><![CDATA[

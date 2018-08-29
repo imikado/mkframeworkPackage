@@ -44,7 +44,7 @@ PRIMARY KEY  (`id`)
 				<html><![CDATA[
 					<h2>TRPresentationENDTR</h2>
 					<p>TRvoilaSchemaDeNotreBaseENDTR</p>
-					<img src="site/css/images/rightsManagerMcd0.png">
+					<img src="css/images/rightsManagerMcd0.png">
 
 					<h2>TRcodesqlENDTR</h2>
 					#code1#
@@ -82,7 +82,7 @@ PRIMARY KEY  (`id`)
 
 			<row name="model_rightManager" required="true">
 				<label>model_rightManager</label>
-				<input type="input" value="model_rightManager"/>
+				<input type="input" value="model_rightsManager"/>
 			</row>
 		</form>
 	</step>
@@ -93,7 +93,7 @@ PRIMARY KEY  (`id`)
 
 			<row type="html">
 				<html><![CDATA[
-					<img src="site/css/images/rightsManagerMcd0.png">
+					<img src="css/images/rightsManagerMcd0.png">
 					<h2>TRUsersENDTR</h2>
 				]]></html>
 			</row>
@@ -155,7 +155,7 @@ PRIMARY KEY  (`id`)
 
 			<row type="html">
 				<html><![CDATA[
-					<img src="site/css/images/rightsManagerMcd0.png">
+					<img src="css/images/rightsManagerMcd0.png">
 					<h2>TRUsersENDTR</h2>
 				]]></html>
 			</row>

@@ -68,7 +68,9 @@
 
 		//votre code
 
-		return array(VARlistReturnWsdlENDVAR);
+		$tReturn= array(VARlistReturnWsdlENDVAR);
+
+		return $this->sendResponse($tReturn);
 	}
 		]]></code>
 		</pluginWsdlMethod>
