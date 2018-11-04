@@ -500,7 +500,7 @@ class plugin_sc_debug{
 		return $sHtml;
 	}
 
-	public static function microtime($sMicrotime=null){
+	public static function microtime(){
 		return microtime(true);
 	}
 

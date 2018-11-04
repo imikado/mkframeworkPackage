@@ -16,7 +16,7 @@
   $autoloader->setFallbackAutoloader(false);
  */
 
-$iMicrotime = microtime();
+$iMicrotime = microtime(true);
 
 //on parse le fichier ini pour trouver l'adresse de la librairie
 $tIni = parse_ini_file('../conf/path.ini.php', true);
@@ -27,17 +27,20 @@ include($tIni['path']['lib'] . '/class_root.php');
 include($tIni['path']['plugin'] . '/sc/plugin_sc_autoload.php');
 spl_autoload_register(array('plugin_sc_autoload', 'autoload'));
 
-function tr($sTag_) {
-	return _root::getI18n()->tr($sTag_);
+function tr($sTag_)
+{
+    return _root::getI18n()->tr($sTag_);
 }
 
-function trR($sTag_, $tReplace_) {
-	return _root::getI18n()->trR($sTag_,$tReplace_);
+function trR($sTag_, $tReplace_)
+{
+    return _root::getI18n()->trR($sTag_, $tReplace_);
 }
 
 //pour gerer toutes les erreurs en exception
-function exception_error_handler($errno, $errstr, $errfile, $errline) {
-	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+function exception_error_handler($errno, $errstr, $errfile, $errline)
+{
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 
 set_error_handler("exception_error_handler");
@@ -56,16 +59,16 @@ $oRoot->addRequest($_POST);
 $oRoot->run();
 
 if (_root::getConfigVar('site.mode') == 'dev') {
-	$oDebug = new plugin_sc_debug($iMicrotime);
-	echo $oDebug->display();
+    $oDebug = new plugin_sc_debug($iMicrotime);
+    echo $oDebug->display();
 }
 if (_root::getConfigVar('log.performance') == 1) {
-	$sUser = null;
-	$oAccount = _root::getAuth();
-	if ($oAccount and $oAccount->getAccount()) {
-		$sUser = $oAccount->getAccount()->ACC_Login;
-	}
-	$iDelta = sprintf('%0.3f', plugin_sc_debug::microtime() - plugin_debug::microtime($iMicrotime));
-	$sLog = date('Y-m-d') . ';' . date('H:i:s') . ';' . $sUser . ';' . $_SERVER['REQUEST_URI'] . ';' . $iDelta . 's' . "\n";
-	file_put_contents(_root::getConfigVar('path.log', 'data/log/') . date('Y-m-d') . '_performance.csv', $sLog, FILE_APPEND);
+    $sUser = null;
+    $oAccount = _root::getAuth();
+    if ($oAccount and $oAccount->getAccount()) {
+        $sUser = $oAccount->getAccount()->ACC_Login;
+    }
+    $iDelta = sprintf('%0.3f', (plugin_sc_debug::microtime() - $iMicrotime));
+    $sLog = date('Y-m-d') . ';' . date('H:i:s') . ';' . $sUser . ';' . $_SERVER['REQUEST_URI'] . ';' . $iDelta . 's' . "\n";
+    file_put_contents(_root::getConfigVar('path.log', 'data/log/') . date('Y-m-d') . '_performance.csv', $sLog, FILE_APPEND);
 }
