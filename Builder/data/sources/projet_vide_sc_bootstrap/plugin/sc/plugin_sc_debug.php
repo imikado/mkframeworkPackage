@@ -74,6 +74,11 @@ class plugin_sc_debug{
 
 		$sVarIniConfig=_root::getConfigVar('model.ini.var','db');
 		$tClassSgbd=_root::getConfigVar($sVarIniConfig);
+		foreach($tClassSgbd as $sVar => $sValue){
+			if(preg_match('/pass/',$sVar)){
+				$tClassSgbd[$sVar]=$sValue='*******';
+			}
+		}
 		$this->addComplexIni('Connexions',array($sVarIniConfig=>$tClassSgbd));
 
 		$tConfigSection=array(
