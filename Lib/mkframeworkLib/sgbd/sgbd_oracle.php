@@ -31,6 +31,9 @@ class sgbd_oracle extends abstract_sgbd{
 		$tObj=array();
 		while($tRow=oci_fetch_assoc($pRs)){
 			$oRow=new $sClassRow($tRow);
+			if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+				$oRow->enableCleaning();
+			}
 			$tObj[]=$oRow;
 		}
 		return $tObj;
@@ -57,6 +60,9 @@ class sgbd_oracle extends abstract_sgbd{
 
 		$tRow=oci_fetch_assoc($pRs);
 		$oRow=new $sClassRow($tRow);
+		if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+			$oRow->enableCleaning();
+		}
 
 		return $oRow;
 	}

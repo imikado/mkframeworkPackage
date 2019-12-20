@@ -69,8 +69,10 @@ use4O4=0
 xsrf.enabled=1
 xsrf.timeout.lifetime=360
 xsrf.checkReferer.enabled=1
-xss.enabled=1
 xsrf.session.enabled=0
+xss.getParam.enabled=0
+xss.model.enabled=1
+xss.model.function=customHtmlentities
 
 [log]
 class=plugin_log

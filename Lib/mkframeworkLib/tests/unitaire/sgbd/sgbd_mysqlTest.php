@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__.'/../../../class_root.php');
+
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
@@ -18,13 +20,12 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
     public function getConfig()
     {
         return array(
+          'mysql.dsn'=>'mysql:dbname=baseTestUnitaire;host=localhost',
+          'mysql.username'=>'userTest',
+          'mysql.password'=>'pass',
+          'mysql.sgbd'=>'pdo_mysql'
 
-                    'mysql.hostname'=>'localhost',
-                    'mysql.username'=>'root',
-                    'mysql.password'=>'root',
-                    'mysql.database'=>'baseTestUnitaire',
-
-            );
+        );
     }
 
     public function setupInit()
@@ -39,36 +40,36 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
 
     public function setupBase()
     {
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig(array(
 
-                        'mysql.hostname'=>'localhost',
-                        'mysql.username'=>'root',
-                        'mysql.password'=>'root',
-                        'mysql.database'=>'mysql',
+          'mysql.dsn'=>'mysql:dbname=mysql;host=localhost',
+          'mysql.username'=>'userTest',
+          'mysql.password'=>'pass',
+          'mysql.sgbd'=>'pdo_mysql'
 
-                ));
+        ));
 
-        $oSgbd->execute('DROP DATABASE baseTestUnitaire');
+        $oSgbd->execute('DROP SCHEMA  IF EXISTS baseTestUnitaire');
 
         $oSgbd->execute('CREATE DATABASE baseTestUnitaire');
     }
     public function setupTable()
     {
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
 
         $oSgbd->setConfig($this->getConfig());
 
         $oSgbd->execute('CREATE TABLE Auteur (
-				id INT NULL AUTO_INCREMENT,
+				id INT NOT NULL AUTO_INCREMENT,
 				nom VARCHAR(50) NULL,
 				prenom VARCHAR(50) NULL,
 				PRIMARY KEY id (id)
@@ -79,12 +80,12 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
     {
         $this->setupInit();
 
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
         require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig($this->getConfig());
 
@@ -102,12 +103,12 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
     {
         $this->setupInit();
 
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
         require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig($this->getConfig());
 
@@ -133,8 +134,8 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
 
 
         require_once(__DIR__.'/../../../sgbd/syntax/sgbd_syntax_mysql.php');
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
         require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
@@ -151,7 +152,7 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
                 ))
             );
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig($this->getConfig());
 
@@ -176,8 +177,6 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('id','nom','prenom'), $tColumn);
 
-        $this->assertEquals(array(), $oSgbd->getListColumn('tableNotFound'));
-
         $tTable=$oSgbd->getListTable();
 
         $this->assertEquals(array('Auteur'), $tTable);
@@ -187,12 +186,12 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
     {
         $this->setupInit();
 
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
         require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig($this->getConfig());
 
@@ -209,43 +208,42 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
 
         $oRowAfterDeleteSimple=$oSgbd->findOneSimple(array('SELECT * FROM Auteur WHERE id=?',1), 'fakeRow');
 
-        $this->assertEquals(null, $oRowAfterDeleteSimple);
+        $this->assertEquals(null, $oRowAfterDeleteSimple, "after delete:".print_r($oRowAfterDeleteSimple,1));
 
         $oRowAfterDelete=$oSgbd->findOne(array('SELECT * FROM Auteur WHERE id=?',1), 'fakeRow');
 
-        $this->assertEquals(new fakeRow(false), $oRowAfterDelete, print_r($oRowAfterDelete, 1));
+        $this->assertEquals(null, $oRowAfterDelete, print_r($oRowAfterDelete, 1));
     }
 
     public function test_getWhereAllShouldFinishOk()
     {
         require_once(__DIR__.'/../../../sgbd/syntax/sgbd_syntax_mysql.php');
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig($this->getConfig());
 
         $this->assertEquals('1=1', $oSgbd->getWhereAll());
 
-        $this->assertEquals(null, $oSgbd->getLastInsertId());
-    }
+     }
 
     public function test_connectShouldFinishException()
     {
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig(array(
 
-                                            'mysql.hostname'=>'localhost',
-                                            'mysql.username'=>'root',
-                                            'mysql.password'=>'root',
-                                            'mysql.database'=>'databaseNotFound',
+          'mysql.dsn'=>'mysql:dbname=databaseNotFound;host=localhost',
+          'mysql.username'=>'userTest',
+          'mysql.password'=>'pass',
+          'mysql.sgbd'=>'pdo_mysql',
 
-                            ));
+        ));
 
         $sException=null;
         try {
@@ -254,22 +252,26 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
             $sException=$e->getMessage();
         }
 
-        $this->assertRegExp('/databaseNotFound Unknown database/', $sException);
-    }
+        $this->assertRegExp('/ Unknown /', $sException);
+        $this->assertRegExp('/ database/', $sException);
+        $this->assertRegExp('/databaseNotFound/', $sException);
+
+     }
 
     public function test_connectShouldFinishException2()
     {
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig(array(
 
-                                            'mysql.hostname'=>'localhost',
-                                            'mysql.username'=>'error',
-                                            'mysql.password'=>'error',
-                                            'mysql.database'=>'databaseNotFound',
+          'mysql.dsn'=>'mysql:dbname=databaseNotFound;host=localhost',
+
+          'mysql.username'=>'error',
+          'mysql.password'=>'error',
+          'mysql.sgbd'=>'pdo_mysql',
 
                             ));
 
@@ -284,17 +286,18 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
     }
     public function test_connectShouldFinishException3()
     {
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
         $oSgbd->setConfig(array(
 
-                                            'mysql.hostname'=>'hostNotFound',
-                                            'mysql.username'=>'error',
-                                            'mysql.password'=>'error',
-                                            'mysql.database'=>'databaseNotFound',
+          'mysql.dsn'=>'mysql:dbname=databaseNotFound;host=hostNotFound',
+
+          'mysql.username'=>'error',
+          'mysql.password'=>'error',
+          'mysql.sgbd'=>'pdo_mysql',
 
                             ));
 
@@ -305,15 +308,16 @@ class sgbd_mysqlTest extends PHPUnit_Framework_TestCase
             $sException=$e->getMessage();
         }
 
-        $this->assertRegExp('/hostNotFound/', $sException);
+        $this->assertRegExp('/getaddrinfo/', $sException);
+        $this->assertRegExp('/hp_network_getaddresses/', $sException);
     }
 
     public function test_getInstanceShouldFinishOk()
     {
-        require_once(__DIR__.'/../../../abstract/abstract_sgbd.php');
-        require_once(__DIR__.'/../../../sgbd/sgbd_mysql.php');
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../sgbd/pdo/sgbd_pdo_mysql.php');
 
-        $oSgbd=new sgbd_mysql();
+        $oSgbd=new sgbd_pdo_mysql();
         $oSgbd->chooseConfig('mysql');
 
         $oInstance=$oSgbd->getInstance('mysql');

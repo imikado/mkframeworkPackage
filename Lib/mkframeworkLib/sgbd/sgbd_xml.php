@@ -159,11 +159,14 @@ class sgbd_xml extends abstract_sgbd
                 $sFilename=$this->_tConfig[$this->_sConfig.'.database'];
                 $sFilename.=$sTable.'/'.substr((string)$tCritere['id'],1).'.xml';
 
-				if(file_exists($sFilename)){
-					$tRow=(array)simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
+                if(file_exists($sFilename)){
+                  $tRow=(array)simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
 
-					$oRow=new $sClassRow($tRow);
-					$tObj[]=$oRow;
+                  $oRow=new $sClassRow($tRow);
+                  if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+                    $oRow->enableCleaning();
+                  }
+                  $tObj[]=$oRow;
                 }
             } else {
                 $tObj=$this->findInTableWithCritere($sClassRow, $sTable, $tCritere);
@@ -321,6 +324,9 @@ class sgbd_xml extends abstract_sgbd
                 $tRow=(array)simplexml_load_file($sFilename, null, LIBXML_NOCDATA);
 
                 $oRow=new $sClassRow($tRow);
+                if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+                  $oRow->enableCleaning();
+                }
                 $tObj[]=$oRow;
             }
         }
@@ -356,6 +362,9 @@ class sgbd_xml extends abstract_sgbd
 
 
             $oRow=new $sClassRow($tRow);
+            if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+              $oRow->enableCleaning();
+            }
             $tObj[]=$oRow;
         }
 

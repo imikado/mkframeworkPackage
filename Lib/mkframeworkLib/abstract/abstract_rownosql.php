@@ -21,11 +21,12 @@ along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
 * @link http://mkf.mkdevs.com/
 */
 abstract class abstract_rownosql{
-	
+
 	private $_bChooseUpdate=false;
 	protected $_tProperty=array();
 	protected $_tPropertyToUpdate;
 
+	protected $_bCleaningEnabled=false;
 	/**
 	* constructeur
 	* @access public
@@ -36,6 +37,22 @@ abstract class abstract_rownosql{
 			$this->chooseUpdate();
 		}
 	}
+
+	/**
+	* active la protection des proprietes
+	* @access public
+	*/
+	public function enableCleaning(){
+		$this->_bCleaningEnabled=true;
+	}
+	/**
+	* active la protection des proprietes
+	* @access public
+	*/
+	public function disableCleaning(){
+		$this->_bCleaningEnabled=false;
+	}
+
 	/**
 	* retourne l'objet model
 	* @access public
@@ -70,7 +87,7 @@ abstract class abstract_rownosql{
 	public function insert(){
 		return $this->getModel()->insert($this);
 	}
-	
+
 	/**
 	* supprime la row
 	* @access public
@@ -78,7 +95,7 @@ abstract class abstract_rownosql{
 	public function delete(){
 		return $this->getModel()->delete($this);
 	}
-	
+
 	/**
 	* retourne si l'objet est vide ou non (pour verifier suite a une requete par exemple)
 	* @return bool
@@ -89,7 +106,7 @@ abstract class abstract_rownosql{
 	  }
 	  return false;
 	}
-	
+
 	public function chooseUpdate(){
 		$this->_bChooseUpdate=true;
 	}
@@ -124,7 +141,7 @@ abstract class abstract_rownosql{
 		}
 		return $tWhereId;
 	}
-	
+
 	/**
 	* setter
 	*/
@@ -137,18 +154,22 @@ abstract class abstract_rownosql{
 	*/
 	public function __get($sVar){
 		if(array_key_exists( (string)$sVar,$this->_tProperty)){
+			if($this->_bCleaningEnabled){
+				return call_user_func_array( _root::getConfigVar('security.xss.model.function','customHtmlentities')  , array($this->_tProperty[$sVar]));
+			}else{
 			return $this->_tProperty[$sVar];
+			}
 		}
 		return null;
 	}
-	/** 
+	/**
 	* isset
 	*/
 	public function __isset($sVar){
         return isset($this->_tProperty[$sVar]);
     }
-    
-    /** 
+
+    /**
 	* unset
 	*/
     public function __unset($sVar){
@@ -162,12 +183,12 @@ abstract class abstract_rownosql{
 		if($uId == null){ return false; }
 		$tColumnId=$this->getModel()->getIdTab();
 		$sColumnId=$tColumnId[0];
-		
+
 		$this->_tProperty[$sColumnId]=$uId;
-		
+
 		$this->chooseUpdate();
 	}
-	
+
 	public function getId(){
 		return implode('::',$this->getWhere());
 	}

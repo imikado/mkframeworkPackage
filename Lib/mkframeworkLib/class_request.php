@@ -21,58 +21,58 @@ along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
 * @link http://mkf.mkdevs.com/
 */
 class _request{
-	
+
 	private $_tVar;
 	private $_sModule;
 	private $_sAction;
 	private $_bHasNavigation;
-	
-	/** 
+
+	/**
 	* constructeur
 	* @access public
 	* @param array $tTab tableau de la requete $_GET, $_POST...
 	*/
 	public function __construct(){
-		
+
 		$this->_sModule=_root::getConfigVar('navigation.module.default',null);
-		
+
 		$this->_sAction=_root::getConfigVar('navigation.action.default',null);
-				
+
 		$this->_tVar=array();
-	
+
 		$this->_bHasNavigation=false;
 	}
-	/** 
+	/**
 	* retourne le parametre $sVar ou $else
 	* @access public
 	* @return undefined $else
 	* @param string $sVar variable a retourner
 	*/
 	public function getParam($sVar,$else=null){
-	
+
 		if(array_key_exists($sVar,$this->_tVar)){
-			if( (int)_root::getConfigVar('security.xss.enabled')==1){
+			if( (int)_root::getConfigVar('security.xss.enabled',0)==1 or (int)_root::getConfigVar('security.xss.getParam.enabled',0)==1 ){
 				if(is_array($this->_tVar[$sVar]) ){
 					return array_map('customHtmlentities',$this->_tVar[$sVar]);
 				}
 				return customHtmlentities($this->_tVar[$sVar]);
 			}else{
 				return $this->_tVar[$sVar];
-			}	
+			}
 		}else{
 			return $else;
 		}
 	}
-	
-	
 
 
 
-	
-	
-	
-	
-	/** 
+
+
+
+
+
+
+	/**
 	* force une variable de request
 	* @access public
 	* @param string $sVar
@@ -84,7 +84,7 @@ class _request{
 			$this->loadContext();
 		}
 	}
-	
+
 	/**
 	* recupere un tableau de l'ensemble des parametres
 	*/
@@ -95,7 +95,7 @@ class _request{
 			return $this->_tVar;
 		}
 	}
-	
+
 	/**
 	* recupere un tableau de l'ensemble des parametres GET (hors navigation: module::action)
 	*/
@@ -110,10 +110,10 @@ class _request{
 			$tParam= $_GET;
 		}
 		unset($tParam[ _root::getConfigVar('navigation.var') ] );
-		
+
 		return $tParam;
 	}
-	
+
 	/**
 	* recupere un tableau de l'ensemble des parametres POST
 	*/
@@ -124,17 +124,17 @@ class _request{
 			return $_POST;
 		}
 	}
-	
-	/** 
+
+	/**
 	* retourne la valeur de navigation
 	* @access public
 	* @return string navigation (module::action)
 	*/
 	public function getParamNav(){
-	
+
 		return $this->getModule().'::'.$this->getAction();
 	}
-	/** 
+	/**
 	* force une variable de navigation
 	* @access public
 	* @param string $sNav
@@ -142,8 +142,8 @@ class _request{
 	public function setParamNav($sNav){
 		$this->loadModuleAndAction($sNav);
 	}
-	
-	/** 
+
+	/**
 	* retourne le parametre $sVar ou $else
 	* @access public
 	* @return undefined $else
@@ -152,7 +152,7 @@ class _request{
 	public function hasNavigation(){
 		return $this->_bHasNavigation;
 	}
-	/** 
+	/**
 	* defini le module $sModule
 	* @access public
 	* @param string $sModule
@@ -160,7 +160,7 @@ class _request{
 	public function setModule($sModule){
 		$this->_sModule=$sModule;
 	}
-	/** 
+	/**
 	* defini le module $sAction
 	* @access public
 	* @param string $sAction
@@ -168,7 +168,7 @@ class _request{
 	public function setAction($sAction){
 		$this->_sAction=$sAction;
 	}
-	/** 
+	/**
 	* retourne le module
 	* @access public
 	* @return string
@@ -176,7 +176,7 @@ class _request{
 	public function getModule(){
 		return $this->_sModule;
 	}
-	/** 
+	/**
 	* retourne l'action
 	* @access public
 	* @return string
@@ -193,7 +193,7 @@ class _request{
 			$this->setAction( _root::getConfigVar('navigation.action.default'));
 		}
 	}
-	/** 
+	/**
 	* initialise module/action a partir d'une chaine module::action
 	* @access public
 	* @param string $sChaine
@@ -217,8 +217,8 @@ class _request{
 		$this->setModule($sModule);
 		$this->setAction($sAction);
 	}
-	
-	/** 
+
+	/**
 	* indique si la requete utilise la methode POST (soumission de formulaire par exple)
 	* @access public
 	* @return bool
@@ -227,7 +227,7 @@ class _request{
 		if($_SERVER['REQUEST_METHOD']=='POST'){ return true;}
 		return false;
 	}
-	/** 
+	/**
 	* indique si la requete utilise la methode GET
 	* @access public
 	* @return bool
@@ -236,7 +236,7 @@ class _request{
 		if($_SERVER['REQUEST_METHOD']=='GET'){ return true;}
 		return false;
 	}
-	
+
 	public function stripslashes_deep($value){
 		if(is_array($value)){
 			return array_map('stripslashes_deep', $value);
@@ -247,7 +247,7 @@ class _request{
 	public function magic_quote(){
 	  $this->_tVar=array_map('stripslashes_deep', $this->_tVar);
 	}
-	
+
 	public function __set($sVar,$sVal){
 		$this->_tVar[$sVar]=$sVal;
 	}

@@ -161,6 +161,9 @@ class sgbd_json extends abstract_sgbd{
 					$tRow=(array)$this->json_decode($sFilename);
 
 					$oRow=new $sClassRow($tRow);
+					if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+						$oRow->enableCleaning();
+					}
 					$tObj[]=$oRow;
 				}
 			}else{
@@ -324,6 +327,9 @@ class sgbd_json extends abstract_sgbd{
 				$tRow=(array)$this->json_decode($sFilename);
 
 				$oRow=new $sClassRow($tRow);
+				if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+					$oRow->enableCleaning();
+				}
 				$tObj[]=$oRow;
 			}
 
@@ -358,6 +364,9 @@ class sgbd_json extends abstract_sgbd{
 
 
 			$oRow=new $sClassRow($tRow);
+			if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+				$oRow->enableCleaning();
+			}
 			$tObj[]=$oRow;
 
 		}

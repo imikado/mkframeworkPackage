@@ -277,6 +277,9 @@ class sgbd_csv extends abstract_sgbd{
 
 
 			$oRow=new $sClassRow($tRow);
+			if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+				$oRow->enableCleaning();
+			}
 			$tObj[]=$oRow;
 
 		}

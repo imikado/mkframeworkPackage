@@ -26,6 +26,7 @@ abstract class abstract_row{
 	protected $_tProperty=array();
 	protected $_tPropertyToUpdate;
 
+	protected $_bCleaningEnabled=false;
 	/**
 	* constructeur
 	* @access public
@@ -36,6 +37,23 @@ abstract class abstract_row{
 			$this->chooseUpdate();
 		}
 	}
+
+	/**
+	* active la protection des proprietes
+	* @access public
+	*/
+	public function enableCleaning(){
+		$this->_bCleaningEnabled=true;
+	}
+
+	/**
+	* active la protection des proprietes
+	* @access public
+	*/
+	public function disableCleaning(){
+		$this->_bCleaningEnabled=false;
+	}
+
 	/**
 	* retourne l'objet model
 	* @access public
@@ -142,7 +160,11 @@ abstract class abstract_row{
 	*/
 	public function __get($sVar){
 		if(array_key_exists( (string)$sVar,$this->_tProperty)){
+			if($this->_bCleaningEnabled){
+				return call_user_func_array( _root::getConfigVar('security.xss.model.function','customHtmlentities')  , array($this->_tProperty[$sVar]));
+			}else{
 			return $this->_tProperty[$sVar];
+			}
 		}
 		return null;
 	}

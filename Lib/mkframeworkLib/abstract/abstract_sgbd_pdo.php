@@ -148,6 +148,9 @@ abstract class abstract_sgbd_pdo{
 		$tObj=array();
 		while($tRow=$pRs->fetch(PDO::FETCH_ASSOC)){
 			$oRow=new $sClassRow($tRow);
+			if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+				$oRow->enableCleaning();
+			}
 			$tObj[]=$oRow;
 		}
 		return $tObj;
@@ -164,6 +167,9 @@ abstract class abstract_sgbd_pdo{
 		}
 
 		$oRow=new $sClassRow($tRow);
+		if( (int)_root::getConfigVar('security.xss.model.enabled',0)==1 ){
+			$oRow->enableCleaning();
+		}
 
 		return $oRow;
 	}

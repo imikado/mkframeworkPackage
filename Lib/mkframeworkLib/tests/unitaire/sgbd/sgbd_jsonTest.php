@@ -1,7 +1,7 @@
 <?php
+require_once(__DIR__.'/../../../class_root.php');
 
 require_once(__DIR__.'/../../inc/abstract/abstract_sgbd.php');
-
 
 require_once(__DIR__.'/../../../sgbd/sgbd_json.php');
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
+* @runTestsInSeparateProcesses
+* @preserveGlobalState disabled
+*/
 class abstract_sgbd_pdo_pdoTest extends PHPUnit_Framework_TestCase
 {
     public function run(PHPUnit_Framework_TestResult $result = null)
@@ -11,7 +11,7 @@ class abstract_sgbd_pdo_pdoTest extends PHPUnit_Framework_TestCase
         return parent::run($result);
     }
 
-		public function test_setClassRowShouldFinishOk()
+    public function test_setClassRowShouldFinishOk()
     {
         require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
         require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
@@ -24,7 +24,7 @@ class abstract_sgbd_pdo_pdoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sExpectedClass, $oSgbd->testui_getClassRow());
     }
 
-		public function test_chooseConfigShouldFinishOk()
+    public function test_chooseConfigShouldFinishOk()
     {
         require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
         require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
@@ -144,7 +144,7 @@ class abstract_sgbd_pdo_pdoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('myRequest', $oSgbd->getRequete());
     }
 
-		public function test_getInstanceShouldFinishOk()
+    public function test_getInstanceShouldFinishOk()
     {
         require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
         require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
@@ -155,470 +155,589 @@ class abstract_sgbd_pdo_pdoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($oSgbd, $oUniqSgbd);
     }
 
-		public function test_getRequestAndParamShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+    public function test_getRequestAndParamShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			$tExpectedReqAndParam=array(
-				'SELECT * FROM myTable WHERE id=?',
-				array(2)
-			);
+        $tExpectedReqAndParam=array(
+          'SELECT * FROM myTable WHERE id=?',
+          array(2)
+        );
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',2);
+        $tReq=array('SELECT * FROM myTable WHERE id=?',2);
 
-			$oSgbd=new fakeSgbdPdo();
-			$tReqAndParam=$oSgbd->testui_getRequestAndParam($tReq);
+        $oSgbd=new fakeSgbdPdo();
+        $tReqAndParam=$oSgbd->testui_getRequestAndParam($tReq);
 
-			$this->assertEquals($tExpectedReqAndParam, $tReqAndParam);
-		}
+        $this->assertEquals($tExpectedReqAndParam, $tReqAndParam);
+    }
 
-		public function test_getRequestAndParamWithArrayShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+    public function test_getRequestAndParamWithArrayShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			$tExpectedReqAndParam=array(
-				'SELECT * FROM myTable WHERE id=?',
-				array(2)
-			);
+        $tExpectedReqAndParam=array(
+          'SELECT * FROM myTable WHERE id=?',
+          array(2)
+        );
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',array(2));
+        $tReq=array('SELECT * FROM myTable WHERE id=?',array(2));
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$tReqAndParam=$oFakeSgbdPdo->testui_getRequestAndParam($tReq);
+        $tReqAndParam=$oFakeSgbdPdo->testui_getRequestAndParam($tReq);
 
-			$this->assertEquals($tExpectedReqAndParam, $tReqAndParam);
-		}
+        $this->assertEquals($tExpectedReqAndParam, $tReqAndParam);
+    }
 
-		public function test_getRequestAndParamWithStringShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+    public function test_getRequestAndParamWithStringShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			$tExpectedReqAndParam=array('SELECT * FROM myTable',null);
+        $tExpectedReqAndParam=array('SELECT * FROM myTable',null);
 
-			$sReq='SELECT * FROM myTable';
+        $sReq='SELECT * FROM myTable';
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$tReqAndParam=$oFakeSgbdPdo->testui_getRequestAndParam($sReq);
+        $tReqAndParam=$oFakeSgbdPdo->testui_getRequestAndParam($sReq);
 
-			$this->assertEquals($tExpectedReqAndParam, $tReqAndParam);
-		}
+        $this->assertEquals($tExpectedReqAndParam, $tReqAndParam);
+    }
 
-		public function test_findManySimpleShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+    public function test_findManySimpleShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$tExpected=array();
+        $tExpected=array();
 
-			$oRow=new stdclass();
-			$oRow->id=1;
-			$oRow->title='title 1';
+        $oRow=new stdclass();
+        $oRow->id=1;
+        $oRow->title='title 1';
 
-			$tExpected[]=$oRow;
+        $tExpected[]=$oRow;
 
-			$oRow=new stdclass();
-			$oRow->id=2;
-			$oRow->title='title 2';
+        $oRow=new stdclass();
+        $oRow->id=2;
+        $oRow->title='title 2';
 
-			$tExpected[]=$oRow;
+        $tExpected[]=$oRow;
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
-			$oFakeSgbdPdo->testui_sth_fetchAllWillReturn($tExpected);
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
+        $oFakeSgbdPdo->testui_sth_fetchAllWillReturn($tExpected);
 
-			$tReq='SELECT * FROM myTable';
+        $tReq='SELECT * FROM myTable';
 
-			$oSgbd=new fakeSgbdPdo();
-			$tRow=$oSgbd->findManySimple($tReq,null);
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findManySimple($tReq, null);
 
-			$this->assertEquals($tExpected, $tRow);
-		}
+        $this->assertEquals($tExpected, $tRow);
+    }
 
-		public function test_findManySimpleWithParamsShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+    public function test_findManySimpleWithParamsShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        require_once(__DIR__.'/../../../class_root.php');
 
 
-			$tExpected=array();
+        $tExpected=array();
 
-			$oRow=new stdclass();
-			$oRow->id=1;
-			$oRow->title='title 1';
+        $oRow=new stdclass();
+        $oRow->id=1;
+        $oRow->title='title 1';
 
-			$tExpected[]=$oRow;
+        $tExpected[]=$oRow;
 
-			$oRow=new stdclass();
-			$oRow->id=2;
-			$oRow->title='title 2';
+        $oRow=new stdclass();
+        $oRow->id=2;
+        $oRow->title='title 2';
 
-			$tExpected[]=$oRow;
+        $tExpected[]=$oRow;
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
-			$oFakeSgbdPdo->testui_sth_fetchAllWillReturn($tExpected);
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
+        $oFakeSgbdPdo->testui_sth_fetchAllWillReturn($tExpected);
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',2);
+        $tReq=array('SELECT * FROM myTable WHERE id=?',2);
 
-			$oSgbd=new fakeSgbdPdo();
-			$tRow=$oSgbd->findManySimple($tReq,null);
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findManySimple($tReq, null);
 
-			$this->assertEquals($tExpected, $tRow);
-		}
+        $this->assertEquals($tExpected, $tRow);
+    }
 
-		public function test_findManyWithParamNullShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+    public function test_findManyWithParamNullShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        require_once(__DIR__.'/../../../class_root.php');
 
 
-			$tExpected=array();
+        $tExpected=array();
 
-			$oRow=new stdclass();
-			$oRow->id=1;
-			$oRow->title='title 1';
+        $oRow=new stdclass();
+        $oRow->id=1;
+        $oRow->title='title 1';
 
-			$tExpected[]=$oRow;
+        $tExpected[]=$oRow;
 
-			$oRow=new stdclass();
-			$oRow->id=2;
-			$oRow->title='title 2';
+        $oRow=new stdclass();
+        $oRow->id=2;
+        $oRow->title='title 2';
 
-			$tExpected[]=$oRow;
+        $tExpected[]=$oRow;
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
-			$oFakeSgbdPdo->testui_sth_fetchAllWillReturn($tExpected);
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
+        $oFakeSgbdPdo->testui_sth_fetchAllWillReturn($tExpected);
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?');
+        $tReq=array('SELECT * FROM myTable WHERE id=?');
 
-			$oSgbd=new fakeSgbdPdo();
-			$tRow=$oSgbd->findManySimple($tReq,null);
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findManySimple($tReq, null);
 
-			$this->assertEquals($tExpected, $tRow);
-		}
+        $this->assertEquals($tExpected, $tRow);
+    }
 
 
 
-		public function test_findManyShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+    public function test_findManyShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$tExpected=array(
-				new fakeRow(array('id'=>1,'title'=>'title 1')),
-				new fakeRow(array('id'=>2,'title'=>'title 2')),
-			);
+        $tExpected=array(
+          new fakeRow(array('id'=>1,'title'=>'title 1')),
+          new fakeRow(array('id'=>2,'title'=>'title 2')),
+        );
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
-					array('id'=>1,'title'=>'title 1'),
-					array('id'=>2,'title'=>'title 2'),
-				)
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(
+            array(
+              array('id'=>1,'title'=>'title 1'),
+              array('id'=>2,'title'=>'title 2'),
+            )
 
-			));
-			//$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
+        ));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			$tReq='SELECT * FROM myTable';
+        $tReq='SELECT * FROM myTable';
 
-			$oSgbd=new fakeSgbdPdo();
-			$tRow=$oSgbd->findMany($tReq,'fakeRow');
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findMany($tReq, 'fakeRow');
 
-			$this->assertEquals($tExpected, $tRow);
-		}
+        $this->assertEquals($tExpected, $tRow);
+    }
 
-		public function test_findManyWithParamsShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+    public function test_findManyCleanedShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../abstract/abstract_row.php');
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$tExpected=array(
-				new fakeRow(array('id'=>1,'title'=>'title 1')),
-				new fakeRow(array('id'=>2,'title'=>'title 2')),
-			);
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        require_once(__DIR__.'/../../inc/model/testRow.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
-					array('id'=>1,'title'=>'title 1'),
-					array('id'=>2,'title'=>'title 2'),
-				)
 
-			));
-			//$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			$tReq=array('SELECT * FROM myTable WHERE type=?',2);
+        $tExpected=array(
+          new fakeRow(array('id'=>1,'title'=>'title 1 &eacute;&szlig;&yen;&ETH;&ntilde;&eth;&#039;&quot;')),
+          new fakeRow(array('id'=>2,'title'=>'title 2')),
+        );
 
-			$oSgbd=new fakeSgbdPdo();
-			$tRow=$oSgbd->findMany($tReq,'fakeRow');
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$this->assertEquals($tExpected, $tRow);
-		}
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(
+            array(
+              array('id'=>1,'title'=>'title 1 éß¥Ðñð\'"'),
+              array('id'=>2,'title'=>'title 2'),
+            )
 
+        ));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-		public function test_findOneWithParamsShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        $tReq='SELECT * FROM myTable';
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        _root::setConfigVar('security.xss.model.enabled', 1);
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findMany($tReq, 'testRow');
 
-			$oExpected=new fakeRow(array('id'=>1,'title'=>'title 1'));
+        foreach ($tExpected as $i => $rowExpected) {
+            $this->assertEquals($rowExpected->id, $tRow[$i]->id);
+            $this->assertEquals($rowExpected->title, $tRow[$i]->title);
+        }
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        //check if disable cleaning:
+        $oRowGenerated=$tRow[0];
+        $this->assertEquals('title 1 &eacute;&szlig;&yen;&ETH;&ntilde;&eth;&#039;&quot;', $oRowGenerated->title);
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
-					array('id'=>1,'title'=>'title 1')
-			)));
-			//$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
+        $oRowGenerated->disableCleaning();
+        $this->assertEquals('title 1 éß¥Ðñð\'"', $oRowGenerated->title);
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',2);
+        $oRowGenerated->enableCleaning();
+        $this->assertEquals('title 1 &eacute;&szlig;&yen;&ETH;&ntilde;&eth;&#039;&quot;', $oRowGenerated->title);
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->findOne($tReq,'fakeRow');
+        $oRowGenerated->disableCleaning();
+        $this->assertEquals('title 1 éß¥Ðñð\'"', $oRowGenerated->title);
+    }
 
-			$this->assertEquals($oExpected, $oRow);
-		}
+    public function test_findManyNotCleanedShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../../abstract/abstract_row.php');
 
-		public function test_findOneWithParamsReturnNullShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$oExpected=null;
+        require_once(__DIR__.'/../../inc/model/testRow.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $tExpected=array(
+          new fakeRow(array('id'=>1,'title'=>'title 1 éß¥Ðñð\'"')),
+          new fakeRow(array('id'=>2,'title'=>'title 2')),
+        );
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
-					null
-			)));
-			//$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',2);
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(
+            array(
+              array('id'=>1,'title'=>'title 1 éß¥Ðñð\'"'),
+              array('id'=>2,'title'=>'title 2'),
+            )
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->findOne($tReq,'fakeRow');
+        ));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			$this->assertEquals($oExpected, $oRow);
-		}
+        $tReq='SELECT * FROM myTable';
 
-		public function test_findOneSimpleWithParamsShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        _root::setConfigVar('security.xss.model.enabled', 0);
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findMany($tReq, 'testRow');
 
-			require_once(__DIR__.'/../../../class_root.php');
+        foreach ($tExpected as $i => $rowExpected) {
+            $this->assertEquals($rowExpected->id, $tRow[$i]->id);
+            $this->assertEquals($rowExpected->title, $tRow[$i]->title);
+        }
+    }
 
-			$oExpected=array('id'=>1,'title'=>'title 1');
+    public function test_findManyWithParamsShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
-					array('id'=>1,'title'=>'title 1')
-			)));
-			//$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',2);
+        $tExpected=array(
+          new fakeRow(array('id'=>1,'title'=>'title 1')),
+          new fakeRow(array('id'=>2,'title'=>'title 2')),
+        );
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->findOneSimple($tReq,'fakeRow');
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$this->assertEquals($oExpected, $oRow);
-		}
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(
+            array(
+              array('id'=>1,'title'=>'title 1'),
+              array('id'=>2,'title'=>'title 2'),
+            )
 
-		public function test_findOneSimpleWithParamsReturnNullShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        ));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $tReq=array('SELECT * FROM myTable WHERE type=?',2);
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $oSgbd=new fakeSgbdPdo();
+        $tRow=$oSgbd->findMany($tReq, 'fakeRow');
 
-			$oExpected=null;
+        $this->assertEquals($tExpected, $tRow);
+    }
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
-					null
-			)));
-			//$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
+    public function test_findOneWithParamsShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$tReq=array('SELECT * FROM myTable WHERE id=?',2);
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->findOneSimple($tReq,'fakeRow');
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$this->assertEquals($oExpected, $oRow);
-		}
+        $oExpected=new fakeRow(array('id'=>1,'title'=>'title 1'));
 
-		public function test_executeShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
+        array('id'=>1,'title'=>'title 1')
+        )));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $tReq=array('SELECT * FROM myTable WHERE id=?',2);
 
-			$oExpected=null;
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->findOne($tReq, 'fakeRow');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $this->assertEquals($oExpected, $oRow);
+    }
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn( new fakePdoSth());
+    public function test_findOneWithParamsReturnNullShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$tReq='SELECT * FROM myTable ';
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->execute($tReq);
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$this->assertEquals(new fakePdoSth(), $oRow);
-		}
+        $oExpected=null;
 
-		public function test_updateShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
+        null
+        )));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $tReq=array('SELECT * FROM myTable WHERE id=?',2);
 
-			$oExpected=null;
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->findOne($tReq, 'fakeRow');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $this->assertEquals($oExpected, $oRow);
+    }
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn( new fakePdoSth());
+    public function test_findOneSimpleWithParamsShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$sTable='myTable';
-			$tProperty=array('title'=>'title 1');
-			$tWhere=array('id'=>2);
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->update($sTable,$tProperty,$tWhere);
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$this->assertEquals(null, $oRow);
-		}
+        $oExpected=array('id'=>1,'title'=>'title 1');
 
-		public function test_insertShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
+        array('id'=>1,'title'=>'title 1')
+        )));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $tReq=array('SELECT * FROM myTable WHERE id=?',2);
 
-			$oExpected=null;
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->findOneSimple($tReq, 'fakeRow');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        $this->assertEquals($oExpected, $oRow);
+    }
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn( new fakePdoSth());
+    public function test_findOneSimpleWithParamsReturnNullShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$oFakeSgbdPdo->testui_getLastInsertIdWillReturn( 33);
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$sTable='myTable';
-			$tProperty=array('title'=>'title 1');
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->insert($sTable,$tProperty);
+        $oExpected=null;
 
-			$this->assertEquals(null, $oRow);
-		}
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-		public function test_deleteShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoFetch(array(
+        null
+        )));
+        //$oFakeSgbdPdo->testui_sth_fetchWillReturn(array('id'=>2,'title'=>'title 1'));
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $tReq=array('SELECT * FROM myTable WHERE id=?',2);
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->findOneSimple($tReq, 'fakeRow');
 
-			$oExpected=null;
+        $this->assertEquals($oExpected, $oRow);
+    }
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+    public function test_executeShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn( new fakePdoSth());
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$oFakeSgbdPdo->testui_getLastInsertIdWillReturn( 33);
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$sTable='myTable';
-			$tProperty=array('title'=>'title 1');
+        $oExpected=null;
 
-			$oSgbd=new fakeSgbdPdo();
-			$oRow=$oSgbd->delete($sTable,$tProperty);
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$this->assertEquals(null, $oRow);
-		}
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
 
-		public function test_getPdoShouldFinishOk(){
-			require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
-			require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
-			require_once(__DIR__.'/../../inc/model/fakeRow.php');
+        $tReq='SELECT * FROM myTable ';
 
-			require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->execute($tReq);
 
-			require_once(__DIR__.'/../../../class_root.php');
+        $this->assertEquals(new fakePdoSth(), $oRow);
+    }
 
-			$oExpected=null;
+    public function test_updateShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
 
-			$oFakeSgbdPdo=new fakeSgbdPdo();
-			$oFakeSgbdPdo->testui_reset();
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
 
-			$oFakeSgbdPdo->testui_pdo_prepareWillReturn( new fakePdoSth());
+        require_once(__DIR__.'/../../../class_root.php');
 
-			$oFakeSgbdPdo->testui_getLastInsertIdWillReturn( 33);
+        $oExpected=null;
 
-			$sTable='myTable';
-			$tProperty=array('title'=>'title 1');
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
 
-			$oSgbd=new fakeSgbdPdo();
-			$oPdo=$oSgbd->getPdo();
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
 
-			$this->assertEquals(new fakePdo(), $oPdo);
-		}
+        $sTable='myTable';
+        $tProperty=array('title'=>'title 1');
+        $tWhere=array('id'=>2);
 
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->update($sTable, $tProperty, $tWhere);
 
+        $this->assertEquals(null, $oRow);
+    }
 
-	}
+    public function test_insertShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
+
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+
+        require_once(__DIR__.'/../../../class_root.php');
+
+        $oExpected=null;
+
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
+
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
+
+        $oFakeSgbdPdo->testui_getLastInsertIdWillReturn(33);
+
+        $sTable='myTable';
+        $tProperty=array('title'=>'title 1');
+
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->insert($sTable, $tProperty);
+
+        $this->assertEquals(null, $oRow);
+    }
+
+    public function test_deleteShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
+
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+
+        require_once(__DIR__.'/../../../class_root.php');
+
+        $oExpected=null;
+
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
+
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
+
+        $oFakeSgbdPdo->testui_getLastInsertIdWillReturn(33);
+
+        $sTable='myTable';
+        $tProperty=array('title'=>'title 1');
+
+        $oSgbd=new fakeSgbdPdo();
+        $oRow=$oSgbd->delete($sTable, $tProperty);
+
+        $this->assertEquals(null, $oRow);
+    }
+
+    public function test_getPdoShouldFinishOk()
+    {
+        require_once(__DIR__.'/../../../abstract/abstract_sgbd_pdo.php');
+        require_once(__DIR__.'/../../inc/abstract/fakeSgbdPdo.php');
+        require_once(__DIR__.'/../../inc/model/fakeRow.php');
+
+        require_once(__DIR__.'/../../inc/sgbd/pdo/fakePdoFetch.php');
+
+        require_once(__DIR__.'/../../../class_root.php');
+
+        $oExpected=null;
+
+        $oFakeSgbdPdo=new fakeSgbdPdo();
+        $oFakeSgbdPdo->testui_reset();
+
+        $oFakeSgbdPdo->testui_pdo_prepareWillReturn(new fakePdoSth());
+
+        $oFakeSgbdPdo->testui_getLastInsertIdWillReturn(33);
+
+        $sTable='myTable';
+        $tProperty=array('title'=>'title 1');
+
+        $oSgbd=new fakeSgbdPdo();
+        $oPdo=$oSgbd->getPdo();
+
+        $this->assertEquals(new fakePdo(), $oPdo);
+    }
+}
