@@ -122,15 +122,33 @@ class sgbd_oracle extends abstract_sgbd{
 
 	private function connect(){
 		if(empty($this->_pDb)){
-			if( ($this->_pDb=oci_connect(
 
-					$this->_tConfig[$this->_sConfig.'.username'],
-					$this->_tConfig[$this->_sConfig.'.password'],
-					$this->_tConfig[$this->_sConfig.'.hostname'].'/'.$this->_tConfig[$this->_sConfig.'.database']
-			))==false ){
-				$e = oci_error();
-				throw new Exception('Probleme connexion sql : '.$e['message']);
+			if(isset($this->_tConfig[$this->_sConfig.'.character_set'])){
+				if( ($this->_pDb=oci_connect(
+
+						$this->_tConfig[$this->_sConfig.'.username'],
+						$this->_tConfig[$this->_sConfig.'.password'],
+						$this->_tConfig[$this->_sConfig.'.hostname'].'/'.$this->_tConfig[$this->_sConfig.'.database'],
+						$this->_tConfig[$this->_sConfig.'.character_set']
+
+				))==false ){
+					$e = oci_error();
+					throw new Exception('Probleme connexion sql : '.$e['message']);
+				}
+			}else{
+				if( ($this->_pDb=oci_connect(
+
+						$this->_tConfig[$this->_sConfig.'.username'],
+						$this->_tConfig[$this->_sConfig.'.password'],
+						$this->_tConfig[$this->_sConfig.'.hostname'].'/'.$this->_tConfig[$this->_sConfig.'.database']
+
+				))==false ){
+					$e = oci_error();
+					throw new Exception('Probleme connexion sql : '.$e['message']);
+				}
 			}
+
+
 
 
 		}
@@ -150,6 +168,9 @@ class sgbd_oracle extends abstract_sgbd{
 
 	}
 	public function quote($sVal){
+		if ( isset($this->_tConfig[$this->_sConfig.'.escapeDateField']) && $this->_tConfig[$this->_sConfig.'.escapeDateField']==1 && (preg_match('!^TO_DATE\(.*\)!', $sVal) || preg_match('!^TO_TIMESTAMP\(.*\)!', $sVal))    ) {
+			return $sVal;
+		}
 		return str_replace("\\",'', str_replace("'",'\'',"'".$sVal."'"));
 	}
 	public function getWhereAll(){

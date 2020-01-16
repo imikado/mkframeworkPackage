@@ -31,6 +31,8 @@ oracleExple.username=username
 oracleExple.password=pass
 oracleExple.database=myOracleDb
 oracleExple.hostname=myOracleHostname
+oracleExple.character_set=AL32UTF8
+oracleExple.escapeDateField=1
 
 xmlExple.dsn=
 xmlExple.sgbd=xml

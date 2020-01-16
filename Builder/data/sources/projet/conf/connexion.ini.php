@@ -31,6 +31,8 @@ oracleExple.username=username
 oracleExple.password=pass
 oracleExple.database=myOracleDb
 oracleExple.hostname=myOracleHostname
+oracleExple.character_set=AL32UTF8
+oracleExple.escapeDateField=1
 
 xmlExple.dsn=
 xmlExple.sgbd=xml
@@ -47,4 +49,3 @@ jsonExple.database=../data/json/base/
 mongodb.dsn="mongodb://monuser:pass@localhost:27017/mabase"
 mongodb.sgbd=mongodb
 mongodb.database=mabase
-
