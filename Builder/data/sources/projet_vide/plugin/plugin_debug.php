@@ -14,12 +14,13 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with Mkframework.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
+
 /**
-* plugin_gestionuser classe de gestion user
-* @author Mika
-* @link http://mkf.mkdevs.com/
-*/
+ * plugin_gestionuser classe de gestion user
+ * @author Mika
+ * @link http://mkf.mkdevs.com/
+ */
 class plugin_debug
 {
     private $iStartMicrotime;
@@ -29,7 +30,12 @@ class plugin_debug
     private static $tTime;
     private static $tTimeById;
 
-    public static $enabled=0;
+    public static $enabled = 0;
+
+    public function protectPrintR($tab_)
+    {
+        return customHtmlentities(print_r($tab_, true));
+    }
 
     public function __construct($iMicrotime)
     {
@@ -37,55 +43,55 @@ class plugin_debug
             return;
         }
 
-        $this->iStartMicrotime=$iMicrotime;
+        $this->iStartMicrotime = $iMicrotime;
 
-        $iEndTime=self::microtime();
-        self::$tTime[]=array('End',$iEndTime);
+        $iEndTime = self::microtime();
+        self::$tTime[] = array('End', $iEndTime);
 
-        $iDiff=($iEndTime-$this->iStartMicrotime);
+        $iDiff = ($iEndTime - $this->iStartMicrotime);
 
-        $this->add('Time', sprintf('%0.3f', $iDiff).'s');
+        $this->add('Time', sprintf('%0.3f', $iDiff) . 's');
 
         $this->addComplexTimes('times', self::$tTime);
 
-        $this->addComplex('$_GET', print_r($_GET, 1));
+        $this->addComplex('$_GET', $this->protectPrintR($_GET));
 
         if (isset($_POST)) {
-            $this->addComplex('$_POST', print_r($_POST, 1));
+            $this->addComplex('$_POST', $this->protectPrintR($_POST));
         }
 
         if (isset($_SESSION)) {
-            $this->addComplex('$_SESSION', print_r($_SESSION, 1));
+            $this->addComplex('$_SESSION', $this->protectPrintR($_SESSION));
         }
 
         if (isset($_SERVER)) {
-            $this->addComplex('$_SERVER', print_r($_SERVER, 1));
+            $this->addComplex('$_SERVER', $this->protectPrintR($_SERVER));
         }
 
-        $oRequest=_root::getRequest();
+        $oRequest = _root::getRequest();
 
         $this->add('Module', $oRequest->getModule());
         $this->add('Action', $oRequest->getAction());
 
-        $oFileLog=new _file(_root::getConfigVar('path.log', 'data/log/').date('Y-m-d').'_log.csv');
+        $oFileLog = new _file(_root::getConfigVar('path.log', 'data/log/') . date('Y-m-d') . '_log.csv');
         if ($oFileLog->exist()) {
             $oFileLog->load();
-            $sContentLog=$oFileLog->getContent();
+            $sContentLog = $oFileLog->getContent();
             $this->addFileLog('File log', $sContentLog);
         }
 
-        $sVarIniConfig=_root::getConfigVar('model.ini.var', 'db');
-        $tClassSgbd=_root::getConfigVar($sVarIniConfig);
-        foreach($tClassSgbd as $sVar => $sValue){
-    			if(preg_match('/pass/',$sVar)){
-    				$tClassSgbd[$sVar]=$sValue='*******';
-    			}
-    		}
-        $this->addComplexIni('Connexions', array($sVarIniConfig=>$tClassSgbd));
+        $sVarIniConfig = _root::getConfigVar('model.ini.var', 'db');
+        $tClassSgbd = _root::getConfigVar($sVarIniConfig);
+        foreach ($tClassSgbd as $sVar => $sValue) {
+            if (preg_match('/pass/', $sVar)) {
+                $tClassSgbd[$sVar] = '*******';
+            }
+        }
+        $this->addComplexIni('Connexions', array($sVarIniConfig => $tClassSgbd));
 
-        $tConfigSection=array(
-            'path' ,
-            'cache' ,
+        $tConfigSection = array(
+            'path',
+            'cache',
             'language',
             'auth',
             'acl',
@@ -97,9 +103,9 @@ class plugin_debug
             'path',
             'model',
         );
-        $tConfig=array();
+        $tConfig = array();
         foreach ($tConfigSection as $sSection) {
-            $tConfig[$sSection]=_root::getConfigVar($sSection);
+            $tConfig[$sSection] = _root::getConfigVar($sSection);
         }
 
         $this->addComplexIni('Config', $tConfig);
@@ -108,7 +114,7 @@ class plugin_debug
             $this->addComplexSpy('Spy variables', self::$tSpy);
         }
 
-        $tSessionSpy=self::getListSessionSpy();
+        $tSessionSpy = self::getListSessionSpy();
         if ($tSessionSpy) {
             $this->addComplexSpy('Spy Session variables', $tSessionSpy);
         }
@@ -117,17 +123,17 @@ class plugin_debug
     }
 
     /** ajoute dans la barre de debug l'affichage d'une variable (tableau,objet..)
-    * @access public
-    * @return void
-    * @param string $uLabel nom de la variable a afficher
-    * @param mixte $uVar la variable a afficher dans la barre
-    */
+     * @access public
+     * @return void
+     * @param string $uLabel nom de la variable a afficher
+     * @param mixte $uVar la variable a afficher dans la barre
+     */
     public static function addSpy($uLabel, $uVar)
     {
         if (!self::$enabled) {
             return;
         }
-        self::$tSpy[][$uLabel]=$uVar;
+        self::$tSpy[][$uLabel] = $uVar;
     }
 
     public static function getIpHash()
@@ -136,8 +142,8 @@ class plugin_debug
     }
     public static function getSessionSpyVarFilename()
     {
-        $sIP=self::getIpHash();
-        return _root::getConfigVar('path.log', 'data/log/').'spyVar'.$sIP;
+        $sIP = self::getIpHash();
+        return _root::getConfigVar('path.log', 'data/log/') . 'spyVar' . $sIP;
     }
 
     public static function addSessionSpy($uLabel, $uVar)
@@ -146,26 +152,26 @@ class plugin_debug
             return;
         }
 
-        $sFilename=self::getSessionSpyVarFilename();
+        $sFilename = self::getSessionSpyVarFilename();
 
-        $tSpy=array();
+        $tSpy = array();
         if (file_exists($sFilename)) {
-            $tSpy=unserialize(file_get_contents($sFilename));
+            $tSpy = unserialize(file_get_contents($sFilename));
         }
 
-        $tSpy[][$uLabel]=$uVar;
+        $tSpy[][$uLabel] = $uVar;
 
         file_put_contents($sFilename, serialize($tSpy));
     }
     public static function getListSessionSpy()
     {
-        $sFilename=self::getSessionSpyVarFilename();
-        $tSpy=array();
+        $sFilename = self::getSessionSpyVarFilename();
+        $tSpy = array();
         if (file_exists($sFilename)) {
-            $tSpy=unserialize(file_get_contents($sFilename));
-        }
+            $tSpy = unserialize(file_get_contents($sFilename));
 
-        //file_put_contents($sFilename, null);
+            file_put_contents($sFilename, null);
+        }
 
         return $tSpy;
     }
@@ -176,102 +182,100 @@ class plugin_debug
     }
 
     /** ajoute un chrono
-    * @access public
-    * @return void
-    * @param string $uLabel nom du chrono
-    */
+     * @access public
+     * @return void
+     * @param string $uLabel nom du chrono
+     */
     public static function addChrono($uLabel)
     {
         if (!self::$enabled) {
             return;
         }
-        $iTime=self::microtime();
-        self::$tTime[]=array($uLabel,$iTime);
+        $iTime = self::microtime();
+        self::$tTime[] = array($uLabel, $iTime);
     }
     /** demarre un chrono (pour chronometre le temps d'un point A a un point B)
-    * @access public
-    * @return void
-    * @param string $uLabel nom du chrono
-    */
+     * @access public
+     * @return void
+     * @param string $uLabel nom du chrono
+     */
     public static function startChrono($uLabel)
     {
         if (!self::$enabled) {
             return;
         }
-        $iTime=self::microtime();
-        self::$tTimeById[$uLabel]['start']=$iTime;
+        $iTime = self::microtime();
+        self::$tTimeById[$uLabel]['start'] = $iTime;
     }
     /** arrete le chrono de l'id passe (pour chronometre le temps d'un point A a un point B)
-    * @access public
-    * @return void
-    * @param string $uLabel nom du chrono (qui doit etre le meme que le chrono demarre)
-    */
+     * @access public
+     * @return void
+     * @param string $uLabel nom du chrono (qui doit etre le meme que le chrono demarre)
+     */
     public static function stopChrono($uLabel)
     {
         if (!self::$enabled) {
             return;
         }
-        $iTime=self::microtime();
-        self::$tTimeById[$uLabel]['end']=$iTime;
+        $iTime = self::microtime();
+        self::$tTimeById[$uLabel]['end'] = $iTime;
     }
-
-
-
 
     public function display()
     {
         echo '<script>
-		var activePopup=\'\';
-		function openPopupDebug(id){
-			if(id!=activePopup){
-				closePopup();
-			}
+        var activePopup=\'\';
+        function openPopupDebug(id){
+            if(id!=activePopup){
+                closePopup();
+            }
 
-			var a=getById(id);
-			if(!a){
-			}else if(a.style.display=="none"){
-				a.style.display="block";
-				activePopup=id;
-			}else if(a.style.display=="block"){
-				a.style.display="none";
-				activePopup=id;
-			}
-		}
-		function closePopup(){
-			if(activePopup){
-				var b=getById(activePopup);
-				if(b){
-					b.style.display="none";
-				}
-			}
-		}
-		function showHideDebugBar(){
-			var a=getById(\'debugBar\');
-			if(a){
-				btnName="Masquer";
+            var a=getById(id);
+            if(!a){
+            }else if(a.style.display=="none"){
+                a.style.display="block";
+                activePopup=id;
+            }else if(a.style.display=="block"){
+                a.style.display="none";
+                activePopup=id;
+            }
+        }
+        function closePopup(){
+            if(activePopup){
+                var b=getById(activePopup);
+                if(b){
+                    b.style.display="none";
+                }
+            }
+        }
+        function showHideDebugBar(){
+            var a=getById(\'debugBar\');
+            if(a){
+                btnName="Masquer";
 
-				if(a.style.display==\'none\'){
-					a.style.display=\'block\';
-					var b=getById(\'debugBtn\');
-					if(b){
-						b.style.width=\'100%\';
-					}
-				}else{
-					a.style.display=\'none\';
-					var b=getById(\'debugBtn\');
-					if(b){
-						b.style.width=\'auto\';
-					}
-					btnName=">>";
-				}
+                if(a.style.display==\'none\'){
+                    a.style.display=\'block\';
+                    var b=getById(\'debugBtn\');
+                    if(b){
+                        b.style.width=\'100%\';
+                    }
+                }else{
+                    a.style.display=\'none\';
+                    var b=getById(\'debugBtn\');
+                    if(b){
+                        b.style.width=\'auto\';
+                    }
+                    btnName=">>";
+                }
 
-				var c=getById(\'btnHidebar\');
-				if(c){
-					c.value=btnName;
-				}
-			}
-		}
-		</script>';
+                var c=getById(\'btnHidebar\');
+                if(c){
+                    c.value=btnName;
+                }
+            }
+        }
+        </script>';
+        echo '<style>#debugBar, #debugBtn{ font-size:11px; }</style>';
         echo '<div id="debugBtn" ';
         echo 'style="position:fixed;border:2px solid #444;background:#ddd;bottom:0px;left:0px;width:100%">';
         echo '<div  style="float:left"><input id="btnHidebar" type="button" value="Masquer" onclick="showHideDebugBar()"/></div>';
@@ -280,85 +284,85 @@ class plugin_debug
         echo '</div>';
         echo '</div>';
 
-        if (_root::getConfigVar('debug.bar.open', 1)==0) {
+        if (_root::getConfigVar('debug.bar.open', 1) == 0) {
             echo '<script>showHideDebugBar()</script>';
         }
     }
 
     private function addComplex($key, $value)
     {
-        $this->addHtml('<input type="button" value="'.$key.'" onclick="openPopupDebug(\'popupDebug'.$key.'\')" />');
+        $this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
         $this->addSep();
 
         $this->addPopupPrintr($key, $value);
     }
     private function addComplexTimes($key, $value)
     {
-        $this->addHtml('<input type="button" value="'.$key.'" onclick="openPopupDebug(\'popupDebug'.$key.'\')" />');
+        $this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
         $this->addSep();
 
-        $value=$this->parseTime($value);
+        $value = $this->parseTime($value);
 
         $this->addPopup($key, $value);
     }
     private function addComplexIni($key, $value)
     {
-        $this->addHtml('<input type="button" value="'.$key.'" onclick="openPopupDebug(\'popupDebug'.$key.'\')" />');
+        $this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
         $this->addSep();
 
-        $value=$this->parseIni($value);
+        $value = $this->parseIni($value);
 
         $this->addPopup($key, $value);
     }
     private function addComplexSpy($key, $value)
     {
-        $this->addHtml('<input type="button" value="'.$key.'" onclick="openPopupDebug(\'popupDebug'.$key.'\')" />');
+        $this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
         $this->addSep();
 
-        $sValue=$this->parseSpy($value);
+        $sValue = $this->parseSpy($value);
 
         $this->addPopup($key, $sValue);
     }
 
     private function addFileLog($key, $value)
     {
-        $this->addHtml('<input type="button" value="'.$key.'" onclick="openPopupDebug(\'popupDebug'.$key.'\')" />');
+        $this->addHtml('<input type="button" value="' . $key . '" onclick="openPopupDebug(\'popupDebug' . $key . '\')" />');
         $this->addSep();
 
-        $value=$this->parseLog($value);
+        $value = $this->parseLog($value);
 
         $this->addPopup($key, $value);
     }
 
     private function add($key, $value)
     {
-        $this->addHtml('<strong>'.$key.'</strong>:<span style="padding:2px 4px;background:#fff">'.$value.'</span>');
+        $this->addHtml('<strong>' . $key . '</strong>:<span style="padding:2px 4px;background:#fff">' . $value . '</span>');
         $this->addSep();
     }
 
     private function addPopupPrintr($key, $value)
     {
         $this->addHtml(
-        '<div id="popupDebug'.$key.'"
-			style="display:none;position:absolute;left:0px;bottom:20px;border:2px solid gray;background:white">
-			<p style="text-align:right;background:#ccc;margin:0px;"><a href="#" onclick="closePopup()">Fermer</a></p>
-			<div style="height:350px;width:400px;overflow:auto;padding:10px;">
-				<pre>'.customHtmlentities(print_r($value, 1)).'</pre>
-			</div>
-		</div>'
+            '<div id="popupDebug' . $key . '"
+            style="display:none;position:absolute;left:0px;bottom:20px;border:2px solid gray;background:white">
+            <p style="text-align:right;background:#ccc;margin:0px;"><a href="#" onclick="closePopup()">Fermer</a></p>
+            <div style="height:350px;width:400px;overflow:auto;padding:10px;">
+                <pre>' . $this->protectPrintR($value) . '</pre>
+            </div>
+        </div>'
         );
     }
 
-    private function addPopup($key, $value, $width=800)
+    private function addPopup($key, $value, $width = 800)
     {
         $this->addHtml(
-        '<div id="popupDebug'.$key.'"
-			style="display:none;position:absolute;left:0px;bottom:20px;border:2px solid gray;background:white">
-			<p style="text-align:right;background:#ccc;margin:0px;"><a href="#" onclick="closePopup()">Fermer</a></p>
-			<div style="height:350px;width:'.$width.'px;overflow:auto;padding:10px;">
-			'.$value.'
-			</div>
-		</div>'
+            '<div id="popupDebug' . $key . '"
+            style="display:none;position:absolute;left:0px;bottom:20px;border:2px solid gray;background:white">
+            <p style="text-align:right;background:#ccc;margin:0px;"><a href="#" onclick="closePopup()">Fermer</a></p>
+            <div style="height:350px;width:' . $width . 'px;overflow:auto;padding:10px;">
+            ' . $value . '
+            </div>
+        </div>'
         );
     }
 
@@ -367,35 +371,35 @@ class plugin_debug
         $this->addHtml('<input type="button" value="Permissions" onclick="openPopupDebug(\'popupDebugACL\')" />');
         $this->addSep();
 
-        $sHtml='<div style="position:absolute">';
-        $sHtml.='<table style="background:white;border-collapse:collapse">
-		<tr>
-			<th style="border:1px solid gray;">Action</th>
-			<th style="border:1px solid gray;">Component</th>
-		</tr>';
-        $tab=_root::getConfigVar('tAskCan');
-        if ($tab and is_array($tab)):
-        foreach ($tab as $tVal):
-        $sHtml.='<tr>
-			<td style="border:1px solid gray;';
-        if ($tVal[2]) {
-            $sHtml.='color:green;';
-        } else {
-            $sHtml.='color:red';
-        }
-        $sHtml.='">'.$tVal[0].'</td>
-			<td style="border:1px solid gray;';
-        if ($tVal[2]) {
-            $sHtml.='color:green;';
-        } else {
-            $sHtml.='color:red';
-        }
-        $sHtml.='">'.$tVal[1].'</td>
+        $sHtml = '<div style="position:absolute">';
+        $sHtml .= '<table style="background:white;border-collapse:collapse">
+        <tr>
+            <th style="border:1px solid gray;">Action</th>
+            <th style="border:1px solid gray;">Component</th>
+        </tr>';
+        $tab = _root::getConfigVar('tAskCan');
+        if ($tab and is_array($tab)) :
+            foreach ($tab as $tVal) :
+                $sHtml .= '<tr>
+                    <td style="border:1px solid gray;';
+                if ($tVal[2]) {
+                    $sHtml .= 'color:green;';
+                } else {
+                    $sHtml .= 'color:red';
+                }
+                $sHtml .= '">' . $tVal[0] . '</td>
+                    <td style="border:1px solid gray;';
+                if ($tVal[2]) {
+                    $sHtml .= 'color:green;';
+                } else {
+                    $sHtml .= 'color:red';
+                }
+                $sHtml .= '">' . $tVal[1] . '</td>
 
-		</tr>';
-        endforeach;
+                </tr>';
+            endforeach;
         endif;
-        $sHtml.='</table>';
+        $sHtml .= '</table>';
 
         $this->addPopup('ACL', $sHtml, 300);
     }
@@ -407,71 +411,69 @@ class plugin_debug
 
     private function addHtml($sHtml)
     {
-        $this->sHtml.=$sHtml;
+        $this->sHtml .= $sHtml;
     }
 
     private function parseLog($value)
     {
-        $sep=' | ';
+        $sep = ' | ';
 
-        $tLine=explode("\n", $value);
-        $sHtml=null;
+        $tLine = explode("\n", $value);
+        $sHtml = null;
 
-        $iMax=count($tLine)-1;
-        for ($i=$iMax;$i>0;$i--) {
-            $sLine=$tLine[$i];
+        $iMax = count($tLine) - 1;
+        for ($i = $iMax; $i > 0; $i--) {
+            $sLine = $tLine[$i];
 
-            $tCase=explode(';', $sLine, 4);
-            $sDate=null;
+            $tCase = explode(';', $sLine, 4);
+            $sDate = null;
             if (isset($tCase[0])) {
-                $sDate=$tCase[0];
+                $sDate = $tCase[0];
             }
-            $sTime=null;
+            $sTime = null;
             if (isset($tCase[1])) {
-                $sTime=$tCase[1];
+                $sTime = $tCase[1];
             }
-            $sType=null;
+            $sType = null;
             if (isset($tCase[2])) {
-                $sType=$tCase[2];
+                $sType = $tCase[2];
             }
-            $sLog=null;
+            $sLog = null;
             if (isset($tCase[3])) {
-                $sLog=$tCase[3];
+                $sLog = $tCase[3];
             }
 
-            if ($sDate==null) {
+            if ($sDate == null) {
                 continue;
             }
 
-            $sHtml.='<p style="margin:0px">';
+            $sHtml .= '<p style="margin:0px">';
 
-            $sHtml.='<span >'.$sDate.'</span> ';
-            $sHtml.='<span style="font-weight:bold">'.$sTime.'</span>';
+            $sHtml .= '<span >' . $sDate . '</span> ';
+            $sHtml .= '<span style="font-weight:bold">' . $sTime . '</span>';
 
-            $sHtml.=$sep;
+            $sHtml .= $sep;
 
-            $sHtml.='<span style="color:';
-            if ($sType=='info') {
-                $sHtml.='gray';
-            } elseif ($sType=='log') {
-                $sHtml.='darkblue';
+            $sHtml .= '<span style="color:';
+            if ($sType == 'info') {
+                $sHtml .= 'gray';
+            } elseif ($sType == 'log') {
+                $sHtml .= 'darkblue';
             }
-            $sHtml.='">'.$sType.'</span>';
+            $sHtml .= '">' . $sType . '</span>';
 
-            $sHtml.=$sep;
+            $sHtml .= $sep;
 
-            if (substr($sLog, 0, 3)=='sql') {
-                $sHtml.='<span style="color:darkblue"><strong>SQL</strong> '.substr($sLog, 3).'</span>';
+            if (substr($sLog, 0, 3) == 'sql') {
+                $sHtml .= '<span style="color:darkblue"><strong>SQL</strong> ' . substr($sLog, 3) . '</span>';
             } else {
-                $sHtml.=$sLog;
+                $sHtml .= $sLog;
             }
 
-
-
-            $sHtml.='</p>';
+            $sHtml .= '</p>';
 
             if (preg_match('/module a appeler/', $sLog)) {
-                $sHtml.='<p>&nbsp;</p>';
+                $sHtml .= '<p>&nbsp;</p>';
             }
         }
         return $sHtml;
@@ -479,11 +481,11 @@ class plugin_debug
 
     private function parseSpy($tValue)
     {
-        $sHtml=null;
+        $sHtml = null;
         foreach ($tValue as $tDetail) {
             foreach ($tDetail as $ref => $value) {
-                $sHtml.='<h2 style="border-bottom:1px solid black">'.$ref.'</h2>';
-                $sHtml.='<p><pre>'.customHtmlentities(print_r($value, 1)).'</pre></p>';
+                $sHtml .= '<h2 style="border-bottom:1px solid black">' . $ref . '</h2>';
+                $sHtml .= '<p><pre>' . $this->protectPrintR($value) . '</pre></p>';
             }
         }
 
@@ -492,13 +494,13 @@ class plugin_debug
 
     private function parseIni($tValue)
     {
-        $sHtml=null;
+        $sHtml = null;
         foreach ($tValue as $sSection => $tDetail) {
-            $sHtml.='<h2 style="border-bottom:1px solid black">'.$sSection.'</h2>';
+            $sHtml .= '<h2 style="border-bottom:1px solid black">' . $sSection . '</h2>';
             foreach ($tDetail as $sKey => $sValue) {
-                $sHtml.='<p style="margin:0px;margin-left:10px;">';
-                $sHtml.='<strong>'.$sKey.'</strong> = <span style="color:darkgreen"> '.$sValue.'</span>';
-                $sHtml.='</p>';
+                $sHtml .= '<p style="margin:0px;margin-left:10px;">';
+                $sHtml .= '<strong>' . $sKey . '</strong> = <span style="color:darkgreen"> ' . $sValue . '</span>';
+                $sHtml .= '</p>';
             }
         }
 
@@ -506,33 +508,33 @@ class plugin_debug
     }
     private function parseTime($tValue)
     {
-        $sHtml=null;
-        $iPreviousTime=$this->iStartMicrotime;
-        $sPreviousStep='Start';
+        $sHtml = null;
+        $iPreviousTime = $this->iStartMicrotime;
+        $sPreviousStep = 'Start';
         foreach ($tValue as $tDetail) {
-            list($sLabel, $iTime)=$tDetail;
-            $iDelta=($iTime-$iPreviousTime);
-            $sHtml.='<p><strong>'.$sPreviousStep.' &gt;&gt; '.$sLabel.'</strong> : '.sprintf('%0.3f', $iDelta).'s</p>';
+            list($sLabel, $iTime) = $tDetail;
+            $iDelta = ($iTime - $iPreviousTime);
+            $sHtml .= '<p><strong>' . $sPreviousStep . ' &gt;&gt; ' . $sLabel . '</strong> : ' . sprintf('%0.3f', $iDelta) . 's</p>';
 
-            $iPreviousTime=$iTime;
-            $sPreviousStep=$sLabel;
+            $iPreviousTime = $iTime;
+            $sPreviousStep = $sLabel;
         }
 
-        $sHtml.='<p style="border-top:1px solid gray">';
-        $sHtml.='<strong>Total</strong> '.sprintf('%0.3f', ($iTime-$this->iStartMicrotime)).'s';
-        $sHtml.='</p>';
+        $sHtml .= '<p style="border-top:1px solid gray">';
+        $sHtml .= '<strong>Total</strong> ' . sprintf('%0.3f', ($iTime - $this->iStartMicrotime)) . 's';
+        $sHtml .= '</p>';
 
         if (self::$tTimeById) {
-            $sHtml.='<p>&nbsp;</p>';
+            $sHtml .= '<p>&nbsp;</p>';
 
             foreach (self::$tTimeById as $sLabel => $tValue) {
                 if (isset($tValue['end']) and isset($tValue['start'])) {
-                    $iDelta=($tValue['end']-$tValue['start']);
+                    $iDelta = ($tValue['end'] - $tValue['start']);
 
-                    $sHtml.='<p><strong>'.$sLabel.' </strong> : '.sprintf('%0.3f', $iDelta).'s</p>';
+                    $sHtml .= '<p><strong>' . $sLabel . ' </strong> : ' . sprintf('%0.3f', $iDelta) . 's</p>';
                 } else {
-                    $sHtml.='<p><strong>'.$sLabel.' </strong> : <span style="color:red">';
-                    $sHtml.=' Erreur il manque startChrono ou stopChrono</span></p>';
+                    $sHtml .= '<p><strong>' . $sLabel . ' </strong> : <span style="color:red">';
+                    $sHtml .= ' Erreur il manque startChrono ou stopChrono</span></p>';
                 }
             }
         }
@@ -545,6 +547,6 @@ class plugin_debug
         return microtime(true);
     }
 }
-if (_root::getConfigVar('site.mode')=='dev') {
-    plugin_debug::$enabled=1;
+if (_root::getConfigVar('site.mode') == 'dev') {
+    plugin_debug::$enabled = 1;
 }
