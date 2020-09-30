@@ -150,6 +150,9 @@ class _root{
 			if((int)self::getConfigVar('auth.session.cookie_secure')==1 and isset($_SERVER['HTTPS']) ){
 				$bSecure=true;
 			}
+
+			ini_set('session.gc_maxlifetime',(int)self::getConfigVar('auth.session.timeout.lifetime'));
+
 			session_set_cookie_params(
 				(int)self::getConfigVar('auth.session.cookie_lifetime',0),
 				self::getConfigVar('auth.session.cookie_path',null),
