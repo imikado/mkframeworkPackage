@@ -1,1 +1,1 @@
-myViewContent
+<?php echo 'myViewContent';

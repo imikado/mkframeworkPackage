@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 require_once(__DIR__.'/../../../abstract/abstract_module.php');
 
@@ -7,14 +8,16 @@ class fakeModule extends abstract_module
 {
 }
 
+use PHPUnit\Framework\TestCase;
+
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class abstract_moduleTest extends PHPUnit_Framework_TestCase
+class abstract_moduleTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);

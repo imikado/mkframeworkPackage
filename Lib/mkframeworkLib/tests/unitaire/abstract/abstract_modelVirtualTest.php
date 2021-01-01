@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
+use PHPUnit\Framework\TestCase;
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class abstract_modelVirtualTest extends PHPUnit_Framework_TestCase
+class abstract_modelVirtualTest extends TestCase
 {
-	public function run(PHPUnit_Framework_TestResult $result = null)
+	public function run( $result = null)
 	{
 	    $this->setPreserveGlobalState(false);
 	    return parent::run($result);

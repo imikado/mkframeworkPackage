@@ -7,8 +7,6 @@
 		<h3><?php echo tr('builder::new_application_groupPublic') ?></h3>
 		<p><input type="radio" name="opt" value="" checked="checked" /> <?php echo tr('builder::new_applicationVide') ?>
 			<br />
-			<input type="radio" name="opt" value="withexamples" /> <?php echo tr('builder::new_applicationAvecExemples') ?>
-			<br />
 			<input type="radio" name="opt" value="withBootstrap" /> <?php echo tr('builder::new_applicationComptBootstrap') ?></p>
 
 		<p style="padding:6px">

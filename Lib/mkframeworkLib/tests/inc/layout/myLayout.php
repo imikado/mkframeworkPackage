@@ -1,1 +1,1 @@
-myLayoutContent
+<?php echo 'myLayoutContent';

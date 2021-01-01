@@ -1,12 +1,15 @@
 <?php
+declare(strict_types=1);
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class classCacheVarTest extends PHPUnit_Framework_TestCase
+class classCacheVarTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);

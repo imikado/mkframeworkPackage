@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 require_once(__DIR__.'/../../class_root.php');
 
@@ -96,14 +97,15 @@ class module_fake
 
 
 
+use PHPUnit\Framework\TestCase;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class classRootTest extends PHPUnit_Framework_TestCase
+class classRootTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);
@@ -573,7 +575,7 @@ class classRootTest extends PHPUnit_Framework_TestCase
 
         $tConfig=$oRoot->testuGet_tConfigVar();
 
-        $this->assertEquals($tExpectedConfig, $tConfig, print_r($tConfig, 1));
+        $this->assertEquals($tExpectedConfig, $tConfig, print_r($tConfig, true));
     }
 
     public function test_loadConfShouldFinishOk_filter()
@@ -611,7 +613,7 @@ class classRootTest extends PHPUnit_Framework_TestCase
 
         $tConfig=$oRoot->testuGet_tConfigVar();
 
-        $this->assertEquals($tExpectedConfig, $tConfig, print_r($tConfig, 1));
+        $this->assertEquals($tExpectedConfig, $tConfig, print_r($tConfig, true));
     }
 
     public function test_startSessionShouldFinishOk()
@@ -646,6 +648,8 @@ class classRootTest extends PHPUnit_Framework_TestCase
             'domain'=>'myDomain',
             'secure'=>false,
             'httponly'=>true,
+            'samesite' => ''
+
         );
 
         $oRoot = new RootToTest();
@@ -678,6 +682,8 @@ class classRootTest extends PHPUnit_Framework_TestCase
             'domain'=>'myDomain',
             'secure'=>true,
             'httponly'=>true,
+            'samesite' => ''
+
         );
 
         $_SERVER['HTTPS']=1;

@@ -257,7 +257,7 @@ class abstract_pluginChartSVG{
 		
 		
 		
-		$this->sSvg.='<path d="M'.$x.','.$y.' L10,10 A'.$x+($diameter/2).','.$y+($diameter/2).' 0 0,1  z" ';
+		$this->sSvg.='<path d="M'.$x.','.$y.' L10,10 A'.($x+($diameter/2)).','.($y+($diameter/2)).' 0 0,1  z" ';
 		$this->sSvg.='fill="'.$sColor.'"  />';
 	}
 	

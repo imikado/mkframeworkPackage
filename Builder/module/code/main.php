@@ -119,7 +119,7 @@ class module_code extends abstract_module{
 		$tLine=$oFile->getTab();
 		$tLine[$iLine]=$sContent;
 		$tLine=array_map('rtrim',$tLine);
-		$oFile->setContent(implode($tLine,"\n"));
+		$oFile->setContent(implode("\n",$tLine));
 		$oFile->save();
 
 	}

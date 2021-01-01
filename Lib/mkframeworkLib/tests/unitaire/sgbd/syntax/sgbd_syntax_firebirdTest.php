@@ -1,14 +1,17 @@
 <?php
+declare(strict_types=1);
+
 require_once(__DIR__.'/../../../../sgbd/syntax/sgbd_syntax_firebird.php');
 
+use PHPUnit\Framework\TestCase;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class sgbd_syntax_firebirdTest extends PHPUnit_Framework_TestCase
+class sgbd_syntax_firebirdTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);

@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
+use PHPUnit\Framework\TestCase;
+
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class abstract_authTest extends PHPUnit_Framework_TestCase
+class abstract_authTest extends TestCase
 {
-	public function run(PHPUnit_Framework_TestResult $result = null)
+	public function run( $result = null)
 	{
 	    $this->setPreserveGlobalState(false);
 	    return parent::run($result);
@@ -20,7 +23,7 @@ class abstract_authTest extends PHPUnit_Framework_TestCase
 
 		require_once(__DIR__.'/../../inc/fakeClassRoot.php');
 
-		$oMookRequest=$this->getMock('_request');
+		$oMookRequest=$this->createMock('_request');
 
 		fakeAuth::testui_isConnectedWillReturn(true);
 
@@ -42,7 +45,7 @@ class abstract_authTest extends PHPUnit_Framework_TestCase
 
 		require_once(__DIR__.'/../../inc/fakeClassRoot.php');
 
-		$oMookRequest=$this->getMock('_request');
+		$oMookRequest=$this->createMock('_request');
 
 		$oFakeRoot=new _root();
 		$oFakeRoot->setConfigVar('auth.module','auth::login');
@@ -65,7 +68,7 @@ class abstract_authTest extends PHPUnit_Framework_TestCase
 
 		require_once(__DIR__.'/../../inc/fakeClassRoot.php');
 
-		$oMookRequest=$this->getMock('_request');
+		$oMookRequest=$this->createMock('_request');
 		$oMookRequest->method('getModule')->willReturn('default');
 
 		$oFakeRoot=new _root();

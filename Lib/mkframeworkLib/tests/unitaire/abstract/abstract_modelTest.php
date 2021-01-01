@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
+use PHPUnit\Framework\TestCase;
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class abstract_modelTest extends PHPUnit_Framework_TestCase
+class abstract_modelTest extends TestCase
 {
-	public function run(PHPUnit_Framework_TestResult $result = null)
+	public function run( $result = null)
 	{
 	    $this->setPreserveGlobalState(false);
 	    return parent::run($result);
@@ -65,12 +67,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/sgbd/pdo/sgbd_pdo_mysql.php');
 		require_once(__DIR__.'/../../inc/interface/interface_pluginLog.php');
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql select:'.
 			print_r(array(
 			'SELECT * FROM myTable'
-		),1)));
+		),true)));
 
 		$oRoot=new _root();
 		$oRoot->setConfigVar('db',array(
@@ -99,12 +101,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/sgbd/pdo/sgbd_pdo_mysql.php');
 		require_once(__DIR__.'/../../inc/interface/interface_pluginLog.php');
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql select:'.
 			print_r(array(
 			'SELECT * FROM myTable'
-		),1)));
+		),true)));
 
 		$oRoot=new _root();
 		$oRoot->setConfigVar('db',array(
@@ -133,12 +135,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/sgbd/pdo/sgbd_pdo_mysql.php');
 		require_once(__DIR__.'/../../inc/interface/interface_pluginLog.php');
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql select:'.
 			print_r(array(
 			'SELECT * FROM myTable'
-		),1)));
+		),true)));
 
 		$oRoot=new _root();
 		$oRoot->setConfigVar('db',array(
@@ -167,12 +169,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/sgbd/pdo/sgbd_pdo_mysql.php');
 		require_once(__DIR__.'/../../inc/interface/interface_pluginLog.php');
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql select:'.
 			print_r(array(
 			'SELECT * FROM myTable'
-		),1)));
+		),true)));
 
 		$oRoot=new _root();
 		$oRoot->setConfigVar('db',array(
@@ -201,12 +203,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/sgbd/pdo/sgbd_pdo_mysql.php');
 		require_once(__DIR__.'/../../inc/interface/interface_pluginLog.php');
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql execute:'.
 			print_r(array(
 			'SELECT * FROM myTable'
-		),1)));
+		),true)));
 
 		$oRoot=new _root();
 		$oRoot->setConfigVar('db',array(
@@ -240,15 +242,15 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/model/fakeExtAbstractRow.php');
 
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql update:myTable'.
 			print_r(array(
 				'title'=>'title new 1'
-			),1).
+			),true).
 			print_r(array(
 				'id'=>'2'
-			),1)
+			),true)
 
 	));
 
@@ -287,12 +289,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/model/fakeExtAbstractRow.php');
 
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql insert:myTable'.
 			print_r(array(
 				'title'=>'title new 1'
-			),1)
+			),true)
 
 	));
 
@@ -332,12 +334,12 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		require_once(__DIR__.'/../../inc/model/fakeExtAbstractRow.php');
 
 
-		$oMoockLog=$this->getMock('interface_pluginLog');
+		$oMoockLog=$this->createMock('interface_pluginLog');
 		$oMoockLog->expects($this->once())->method('info')->with($this->equalTo(
 			'sql delete:myTable'.
 			print_r(array(
 				'id'=>2
-			),1)
+			),true)
 
 	));
 
@@ -362,7 +364,7 @@ class abstract_modelTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(	'myTable'.
 			print_r(array(
 				'id'=>2
-			),1),$oFakeModel->getRequete());
+			),true),$oFakeModel->getRequete());
 
 	}
 

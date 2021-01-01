@@ -1,11 +1,14 @@
 <?php
+declare(strict_types=1);
+use PHPUnit\Framework\TestCase;
+
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class abstract_sgbdTest extends PHPUnit_Framework_TestCase
+class abstract_sgbdTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);

@@ -53,14 +53,15 @@ class fakeSgbdPdoMssql extends sgbd_pdo_mssql
         }
     }
 }
+use PHPUnit\Framework\TestCase;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class sgbd_pdo_mssqlTest extends PHPUnit_Framework_TestCase
+class sgbd_pdo_mssqlTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);

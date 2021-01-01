@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once(__DIR__.'/../../../class_root.php');
 
 require_once(__DIR__.'/../../inc/abstract/abstract_sgbd.php');
@@ -20,15 +22,16 @@ class row_csv
     }
 }
 
+use PHPUnit\Framework\TestCase;
 
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class sgbd_csvTest extends PHPUnit_Framework_TestCase
+class sgbd_csvTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);

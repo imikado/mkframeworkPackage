@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 require_once(__DIR__.'/../../../../abstract/abstract_sgbd_pdo.php');
 require_once(__DIR__.'/../../../../sgbd/syntax/sgbd_syntax_sqlite.php');
@@ -43,14 +44,15 @@ class fakeSqlitedPdo{
 		return 'lastInsertId';
 	}
 }
+use PHPUnit\Framework\TestCase;
 
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class sgbd_pdo_sqliteTest extends PHPUnit_Framework_TestCase
+class sgbd_pdo_sqliteTest extends TestCase
 {
-    public function run(PHPUnit_Framework_TestResult $result = null)
+    public function run( $result = null)
     {
         $this->setPreserveGlobalState(false);
         return parent::run($result);
@@ -103,7 +105,7 @@ class sgbd_pdo_sqliteTest extends PHPUnit_Framework_TestCase
 		public function test_connecShouldFinishOk(){
 			$oPdo=new fakeSgbdPdosqlite();
 
-			$sException=null;
+			$sException='null';
 
 			try{
 				$oPdo->testui_Connect();

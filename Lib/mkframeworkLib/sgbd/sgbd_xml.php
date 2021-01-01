@@ -440,7 +440,7 @@ class sgbd_xml extends abstract_sgbd
 
         foreach ($tIndexContent as $sKey => $tFile) {
             $oFile=new _file($this->_tConfig[$this->_sConfig.'.database'].$sTable.'/index/'.$sIndex.'/'.$sKey.'.csv');
-            $oFile->setContent(implode($tFile, "\n"));
+            $oFile->setContent(implode("\n",$tFile));
             $oFile->save();
         }
     }

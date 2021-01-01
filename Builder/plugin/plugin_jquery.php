@@ -118,7 +118,7 @@ class plugin_jquery{
 	 
 	*/
 	public function getJs(){
-		$sParams=implode($this->tParam,',');
+		$sParams=implode(',',$this->tParam);
 		return '<script language="Javascript">function '.$this->sName.'('.$sParams.'){'.$this->sJs.'}</script>';
 	}
 	
