@@ -180,6 +180,7 @@ abstract class abstract_row{
 	*/
     public function __unset($sVar){
         unset($this->_tProperty[$sVar]);
+        unset($this->_tPropertyToUpdate[$sVar]);
     }
 	/**
 	* force l'id de l'enregistrement

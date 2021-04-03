@@ -240,5 +240,43 @@ abstract class abstract_model{
 		}
 		return self::$_tInstance[$class];
 	}
+
+
+    /**
+     * @param $request
+     * @return false|resource
+     * @throws Exception
+     */
+    public function ociBindByName($request)
+    {
+        return $this->getSgbd()->ociBindByName($request);
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function commit()
+    {
+        return $this->getSgbd()->commit();
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function rollback()
+    {
+        return $this->getSgbd()->rollback();
+    }
+
+    /**
+     * @return array|false
+     * @throws Exception
+     */
+    public function getError()
+    {
+        return $this->getSgbd()->getError();
+    }
 	
 }
