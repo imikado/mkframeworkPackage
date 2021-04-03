@@ -2,7 +2,7 @@
 	"name": "mkframework/mkframework-package",
 	"description": "Full package with Builder and the mkframework lib.",
 	"license": "LGPL-3.0-only",
-	"version": "1.7.1",
+	"version": "1.8.0",
 	"homepage" : "http://mkframework.com",
 	"require": {
 		"php": ">=5.2.0"

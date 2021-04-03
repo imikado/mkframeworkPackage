@@ -157,16 +157,21 @@ class sgbd_oracle extends abstract_sgbd{
 		return null;
 	}
 
-	private function query($sReq){
-		$this->connect();
-		$this->sReq=$sReq;
-		// return oci_parse($this->_pDb,$sReq);
+    private function query($sReq)
+    {
+        $this->connect();
+        $this->_sReq = $sReq;
+        $query       = oci_parse($this->_pDb, $sReq);
 
-		 $query = oci_parse($this->_pDb,$sReq);
-		 oci_execute($query);
-	    return $query;
+        if (isset($this->_tConfig[$this->_sConfig . '.useTransaction']) && $this->_tConfig[$this->_sConfig . '.useTransaction'] == 1) {
+            oci_execute($query, OCI_NO_AUTO_COMMIT);
+        } else {
+            oci_execute($query);
+        }
 
-	}
+        return $query;
+    }
+
 	public function quote($sVal){
 		if ( isset($this->_tConfig[$this->_sConfig.'.escapeDateField']) && $this->_tConfig[$this->_sConfig.'.escapeDateField']==1 && (preg_match('!^TO_DATE\(.*\)!', $sVal) || preg_match('!^TO_TIMESTAMP\(.*\)!', $sVal))    ) {
 			return $sVal;
@@ -177,5 +182,37 @@ class sgbd_oracle extends abstract_sgbd{
 		return '1=1';
 	}
 
+    /**
+     * @param $request
+     * @return false|resource
+     */
+    public function ociBindByName($request)
+    {
+        return oci_parse($this->_pDb, $request);
+    }
+
+    /**
+     * @return bool
+     */
+    public function commit()
+    {
+        return oci_commit($this->_pDb);
+    }
+
+    /**
+     * @return bool
+     */
+    public function rollback()
+    {
+        return oci_rollback($this->_pDb);
+    }
+
+    /**
+     * @return array|false
+     */
+    public function getError()
+    {
+        return oci_error($this->_pDb);
+    }
 
 }
